@@ -4,6 +4,7 @@ package com.maxmarkovdev.springboot.controller;
 import com.maxmarkovdev.springboot.model.User;
 import com.maxmarkovdev.springboot.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
@@ -20,8 +21,10 @@ public class AdminController {
     }
 
     @GetMapping()
-    public String getAdminPage(ModelMap model) {
+    public String getAdminPage(@AuthenticationPrincipal User user, ModelMap model) {
         model.addAttribute("users", userService.getUsers());
+        User userFromDB = (User) userService.loadUserByUsername(user.getUsername());
+        model.addAttribute("currentUser", userFromDB);
         return "admin";
     }
 

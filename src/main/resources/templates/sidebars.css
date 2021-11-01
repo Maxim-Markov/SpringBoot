@@ -1,0 +1,37 @@
+@media (min-width: 768px) {
+}
+
+.btn-toggle-nav a {
+    display: inline-flex;
+    padding: .1875rem .5rem;
+    margin-top: .125rem;
+    margin-left: 1.25rem;
+    text-decoration: none;
+}
+.btn-toggle-nav a:hover,
+.btn-toggle-nav a:focus {
+    background-color: #d2f4ea;
+}
+
+.sidebar {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 100; /* Behind the navbar */
+    padding: 48px 0 0; /* Height of navbar */
+    box-shadow: inset -1px 0 0 rgba(0, 0, 0, .1);
+}
+
+.table-responsive{
+    padding: 16px;
+    background-color: white;
+}
+
+.btn-info{
+    color: whitesmoke;
+}
+/* stylelint-disable-next-line selector-max-universal */
+.bd-heading + div > * + * {
+    margin-top: 3rem;
+}
