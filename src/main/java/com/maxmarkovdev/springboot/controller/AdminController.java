@@ -21,29 +21,17 @@ public class AdminController {
     }
 
     @GetMapping()
-    public String getAdminPage(@AuthenticationPrincipal User user, ModelMap model) {
+    public String getAdminPage(@AuthenticationPrincipal User currentUser, @ModelAttribute("user") User user, ModelMap model) {
         model.addAttribute("users", userService.getUsers());
-        User userFromDB = (User) userService.loadUserByUsername(user.getUsername());
+        User userFromDB = (User) userService.loadUserByUsername(currentUser.getUsername());
         model.addAttribute("currentUser", userFromDB);
         return "admin";
-    }
-
-    @GetMapping("/new")
-    public String getFormCreateUser(@ModelAttribute("user") User user) {
-        return "new";
     }
 
     @PostMapping()
     public String createUser(@ModelAttribute("user") User user) {
         userService.createUser(user);
         return "redirect:/admin";
-    }
-
-    @GetMapping("/{id}/edit")
-    public String GetFormUpdateUser(@PathVariable("id") long id, ModelMap model) {
-        User user = userService.getUser(id);
-        model.addAttribute("user", user);
-        return "edit";
     }
 
     @PatchMapping("/{id}")
