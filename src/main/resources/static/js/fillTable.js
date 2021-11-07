@@ -14,7 +14,7 @@ fetch('/admin/users', {
                             <td>${user.age}</td>
                             <td>${user.email}</td>
                             <td>${user.password}</td>
-                            <td>${user.roles[0].role}</td>        
+                            <td>${user.roles[0].role.slice(5)}</td>        
                             <td>
                                 <button class="btn btn-info modal-btn">Edit</button>
                             </td>

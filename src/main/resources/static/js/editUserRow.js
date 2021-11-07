@@ -19,7 +19,7 @@ formEdit.onsubmit = async (e) => {
             rowToUpdate.cells[3].textContent = user.age;
             rowToUpdate.cells[4].textContent = user.email;
             rowToUpdate.cells[5].textContent = user.password;
-            rowToUpdate.cells[6].textContent = user.roles[0].role;
+            rowToUpdate.cells[6].textContent = user.roles[0].role.slice(5);
         }
     }
     formEdit.querySelector('.close').click()

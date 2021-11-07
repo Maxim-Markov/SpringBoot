@@ -4,14 +4,16 @@ import com.maxmarkovdev.springboot.model.Role;
 import com.maxmarkovdev.springboot.model.User;
 import com.maxmarkovdev.springboot.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.support.DefaultMessageSourceResolvable;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.ui.ModelMap;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 @RestController
@@ -32,7 +34,7 @@ public class RestControllers {
     }
 
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<User> createUser(@RequestParam("name") String name,
+    public ResponseEntity<?> createUser(@RequestParam("name") String name,
                                         @RequestParam("lastName") String lastName,
                                         @RequestParam("age") String age,
                                         @RequestParam("email") String email,
@@ -41,19 +43,29 @@ public class RestControllers {
         Role userRole = new Role(role);
         User user = new User(name,lastName,Byte.parseByte(age),email,password);
         user.addRole(userRole);
-        long id = userService.createUser(user);
-        user.setId(id);
-        return ResponseEntity.ok().body(user);
+
+        try {
+            long id = userService.createUser(user);
+            user.setId(id);
+            return ResponseEntity.ok().body(user);
+        } catch (DataIntegrityViolationException e) {
+            return new ResponseEntity<>("user with such email already exists", HttpStatus.BAD_REQUEST);
+        }
     }
 
     @PatchMapping(value = "/{id}",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<User> UpdateUser(@RequestParam("name") String name,
-                             @RequestParam("lastName") String lastName,
-                             @RequestParam("age") String age,
-                             @RequestParam("email") String email,
-                             @RequestParam("password") String password,
-                             @RequestParam("roles") String role,
-                             @PathVariable("id") long id) {
+                                           @RequestParam("lastName") String lastName,
+                                           @RequestParam("age") String age,
+                                           @RequestParam("email") String email,
+                                           @RequestParam("password") String password,
+                                           @RequestParam("roles") String role,
+                                           @PathVariable("id") long id,
+                                           BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            String error = getErrorsFromBindingResult(bindingResult);
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
         Role userRole = new Role(role);
         User user = new User(name,lastName,Byte.parseByte(age),email,password);
         user.addRole(userRole);
@@ -62,8 +74,16 @@ public class RestControllers {
     }
 
     @GetMapping(value = "/users")
-    public ResponseEntity<List<User>> UpdateUser() {
+    public ResponseEntity<List<User>> getAllUser() {
         List<User> users = userService.getUsers();
         return new ResponseEntity<>(users,HttpStatus.OK);
     }
+
+    private String getErrorsFromBindingResult(BindingResult bindingResult) {
+        return bindingResult.getFieldErrors()
+                .stream()
+                .map(DefaultMessageSourceResolvable::getDefaultMessage)
+                .collect(Collectors.joining("; "));
+    }
+
 }
