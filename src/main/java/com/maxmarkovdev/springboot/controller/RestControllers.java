@@ -1,5 +1,4 @@
 package com.maxmarkovdev.springboot.controller;
-
 import com.maxmarkovdev.springboot.model.Role;
 import com.maxmarkovdev.springboot.model.User;
 import com.maxmarkovdev.springboot.service.UserService;
@@ -8,6 +7,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -25,9 +25,12 @@ public class RestControllers {
     }
 
     @DeleteMapping("/{id}")
-    public String DeleteUser(@PathVariable("id") long id) {
+    public ResponseEntity<String> DeleteUser(@AuthenticationPrincipal User currentUser, @PathVariable("id") long id) {
+        if(id == currentUser.getId()){
+            return new ResponseEntity<>("You cannot delete yourself",HttpStatus.BAD_REQUEST);
+        }
         userService.deleteUser(id);
-        return "Deleted";
+        return ResponseEntity.ok("Deleted");
     }
 
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)

@@ -1,12 +1,12 @@
-let formsAdd = document.getElementsByName("addForm");//form in modal
+let formAdd = document.getElementsByName("addForm")[0];//form in modal
 let rows = document.getElementsByClassName("usersRow");//table with users
 
-formsAdd[0].onsubmit = async (e) => {
+formAdd.onsubmit = async (e) => {
     e.preventDefault();
     fetch('/admin', {
         credentials: 'include',
         method: 'POST',
-        body: new FormData(formsAdd[0]),
+        body: new FormData(formAdd),
     })
         .then(response => {
             if(response.status === 400){
@@ -31,6 +31,8 @@ formsAdd[0].onsubmit = async (e) => {
                  </tr>`
             rows[rows.length - 1].insertAdjacentHTML("afterEnd", html);
             modalWindow();
+            formAdd.reset();
+            alert("user successfully added")
             })
         })
         .catch(error => alert(`Ошибка: ${error.message}`));

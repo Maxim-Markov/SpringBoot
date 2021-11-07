@@ -7,13 +7,18 @@ formDelete.onsubmit = async (e) => {
         credentials: 'include',
         method: 'DELETE',
     });
-    await response.text();
-    let rows = document.getElementsByClassName("usersRow");
-    for (let i = 0; i < rows.length; i++) {
-        if (rows[i].cells[0].textContent === id) {
-            let rowToDelete = rows[i];
-            rowToDelete.parentNode.removeChild(rowToDelete);
+        if (!response.ok) {
+            alert("You cannot delete yourself");
+            formDelete.querySelector('.close').click()
+            return;
         }
-    }
-    formDelete.querySelector('.close').click()
+        await response.text();
+        let rows = document.getElementsByClassName("usersRow");
+        for (let i = 0; i < rows.length; i++) {
+            if (rows[i].cells[0].textContent === id) {
+                let rowToDelete = rows[i];
+                rowToDelete.parentNode.removeChild(rowToDelete);
+            }
+        }
+        formDelete.querySelector('.close').click()
 }

@@ -112,8 +112,7 @@
                                                 <div class="form-row">
                                                     <label for="editAge" class="form-label fw-bold m-0">Age</label>
                                                     <input type="number" class="form-control" th:name="age" id="editAge"
-                                                           th:max="255"
-                                                           required>
+                                                           max="126" min="0" pattern="{01}{012}}[0-6]" required>
                                                 </div>
                                                 <br>
                                                 <div class="form-row">
@@ -181,7 +180,8 @@
                                                 <div class="form-row">
                                                     <label for="deleteAge" class="form-label fw-bold m-0">Age</label>
                                                     <input type="number" class="form-control" th:name="age"
-                                                           id="deleteAge" th:max="255" disabled>
+                                                           id="deleteAge" max="126"
+                                                           min="0" pattern="{01}{012}}[0-6]"  disabled>
                                                 </div>
                                                 <br>
                                                 <div class="form-row">
@@ -244,19 +244,21 @@
                                     <br>
                                     <div class="form-row">
                                         <label for="addAge" class="form-label fw-bold m-0">Age</label>
-                                        <input type="number" class="form-control" th:name="age" id="addAge" th:max="255"
+                                        <input type="number" class="form-control" th:field="*{age}" id="addAge"
+                                               max="126"
+                                               min="0" pattern="{01}{012}}[0-6]"
                                                required>
                                     </div>
                                     <br>
                                     <div class="form-row">
                                         <label for="addEmail" class="form-label fw-bold m-0">Email</label>
-                                        <input type="text" class="form-control" th:field="*{email}" id="addEmail"
+                                        <input type="text" class="form-control" name="email" id="addEmail"
                                                required>
                                     </div>
                                     <br>
                                     <div class="form-row">
                                         <label for="addPassword" class="form-label fw-bold m-0">Password</label>
-                                        <input type="password" class="form-control" th:field="*{password}"
+                                        <input type="password" class="form-control" name="password" value=""
                                                id="addPassword" required>
                                     </div>
                                     <br>
