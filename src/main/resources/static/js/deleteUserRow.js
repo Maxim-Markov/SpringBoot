@@ -1,9 +1,8 @@
-let formsDelete = document.getElementsByName("DeleteForm");
+let formDelete = document.getElementsByName("DeleteForm")[0];
 
-for (let i = 0; i < formsDelete.length; i++) {
-    formsDelete[i].onsubmit = async (e) => {
+    formDelete.onsubmit = async (e) => {
         e.preventDefault();
-        let id = formsDelete[i][0].value;
+        let id = formDelete[0].value;
         let response = await fetch('/admin/' + id, {
             credentials: 'include',
             method: 'DELETE',
@@ -11,11 +10,9 @@ for (let i = 0; i < formsDelete.length; i++) {
         await response.text();
         let rows = document.getElementsByClassName("usersRow");
         for (let i = 0; i < rows.length; i++) {
-
             if (rows[i].cells[0].textContent === id) {
-                let rowId = rows[i];
-                rowId.parentNode.removeChild(rowId);
+                let rowToDelete = rows[i];
+                rowToDelete.parentNode.removeChild(rowToDelete);
             }
         }
-    };
 }
