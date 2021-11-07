@@ -30,10 +30,11 @@ public class UserDaoImpl implements UserDao {
 
 
     @Override
-    public void createUser(User user) {
+    public long createUser(User user) {
         Session session = sessionFactory.getCurrentSession();
-        session.save(user);
+        long id = (long) session.save(user);
         System.out.println("User с именем – " + user.getName() + " добавлен в базу данных");
+        return id;
     }
 
     @SuppressWarnings("unchecked")

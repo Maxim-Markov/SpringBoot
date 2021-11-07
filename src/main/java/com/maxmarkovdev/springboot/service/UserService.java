@@ -7,7 +7,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.List;
 
 public interface UserService {
-    void createUser(User user);
+    long createUser(User user);
 
     UserDetails loadUserByUsername(String s);
 

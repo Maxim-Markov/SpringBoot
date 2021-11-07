@@ -57,8 +57,8 @@ public class UserDetailsServiceImpl implements UserDetailsService, UserService {
 
     @Override
     @Transactional
-    public void createUser(User user) {
-        userDao.createUser(user);
+    public long createUser(User user) {
+        return userDao.createUser(user);
     }
 
 }

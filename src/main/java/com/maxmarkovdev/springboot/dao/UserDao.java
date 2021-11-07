@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface UserDao {
     User getUserByName(String name);
-    void createUser(User user);
+    long createUser(User user);
 
     List<User> getUsers();
 
