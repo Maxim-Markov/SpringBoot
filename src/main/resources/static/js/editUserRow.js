@@ -22,4 +22,5 @@ let formEdit = document.getElementsByName("editForm")[0];
                 rowToUpdate.cells[6].textContent = user.roles[0].role;
             }
         }
+        formEdit.querySelector('.close').click()
 }

@@ -15,4 +15,5 @@ let formDelete = document.getElementsByName("DeleteForm")[0];
                 rowToDelete.parentNode.removeChild(rowToDelete);
             }
         }
+        formDelete.querySelector('.close').click()
 }
