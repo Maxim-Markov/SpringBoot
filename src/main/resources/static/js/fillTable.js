@@ -1,4 +1,5 @@
-let table = $('#usersTable tbody');
+let table = $('#usersTable tbody');//our main table
+
 table.empty();
 fetch('/admin/users', {
     credentials: 'include',

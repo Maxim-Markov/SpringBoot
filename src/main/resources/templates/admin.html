@@ -30,12 +30,12 @@
                 <ul class="nav nav-pills flex-column mb-auto">
                     <li class="nav-item" th:each="authority : ${#authentication.getAuthorities()}"
                         th:if="${authority.getAuthority().startsWith('ROLE_ADMIN')}">
-                        <a href="/admin" class="nav-link active" aria-current="page">
+                        <a th:href="@{/admin}" class="nav-link active" aria-current="page">
                             Admin
                         </a>
                     </li>
                     <li>
-                        <a href="/user" class="nav-link link-dark">
+                        <a th:href="@{/user}" class="nav-link link-dark">
                             User
                         </a>
                     </li>
@@ -82,8 +82,6 @@
                                     </tbody>
                                 </table>
 
-
-
                                 <div class="modal">
                                     <div class="modal-content">
                                         <span class="h4">Edit user</span>
@@ -92,61 +90,48 @@
                                         <div class="text-center">
                                             <form name="editForm" th:object="${user}">
                                                 <div class="form-row">
-                                                    <label th:for="'editId' "
-                                                           class="form-label fw-bold m-0">ID</label>
-                                                    <input type="text" class="form-control "
-                                                           th:name="id"
-                                                           th:id="'editId'" disabled>
+                                                    <label for="editId" class="form-label fw-bold m-0">ID</label>
+                                                    <input type="text" class="form-control" th:name="id" id="editId"
+                                                           disabled>
                                                 </div>
                                                 <br>
                                                 <div class="form-row">
-                                                    <label th:for="'editName'"
-                                                           class="form-label fw-bold m-0">First
+                                                    <label for="editName" class="form-label fw-bold m-0">First
                                                         name</label>
-                                                    <input type="text" class="form-control"
-                                                           th:name="name"
-                                                           th:id="'editName'" required>
-                                                </div>
-                                                <br>
-                                                <div class="form-row">
-                                                    <label th:for="'editLastName'"
-                                                           class="form-label fw-bold m-0">Last
-                                                        name</label>
-                                                    <input type="text" class="form-control"
-                                                           th:name="lastName"
-
-                                                           th:id="'editLastName'" required>
-                                                </div>
-                                                <br>
-                                                <div class="form-row">
-                                                    <label th:for="'editAge'"
-                                                           class="form-label fw-bold m-0">Age</label>
-                                                    <input type="number" class="form-control"
-                                                           th:name="age"
-                                                           th:id="'editAge'" th:max="255"
+                                                    <input type="text" class="form-control" th:name="name" id="editName"
                                                            required>
                                                 </div>
                                                 <br>
                                                 <div class="form-row">
-                                                    <label th:for="'editEmail'"
-                                                           class="form-label fw-bold m-0">Email</label>
-                                                    <input type="email" class="form-control"
-                                                           th:name="email"
-                                                           th:id="'editEmail'" required>
+                                                    <label for="editLastName" class="form-label fw-bold m-0">Last
+                                                        name</label>
+                                                    <input type="text" class="form-control" th:name="lastName"
+                                                           id="editLastName" required>
                                                 </div>
                                                 <br>
                                                 <div class="form-row">
-                                                    <label th:for="'editPassword'"
+                                                    <label for="editAge" class="form-label fw-bold m-0">Age</label>
+                                                    <input type="number" class="form-control" th:name="age" id="editAge"
+                                                           th:max="255"
+                                                           required>
+                                                </div>
+                                                <br>
+                                                <div class="form-row">
+                                                    <label for="editEmail" class="form-label fw-bold m-0">Email</label>
+                                                    <input type="email" class="form-control" th:name="email"
+                                                           id="editEmail" required>
+                                                </div>
+                                                <br>
+                                                <div class="form-row">
+                                                    <label for="editPassword"
                                                            class="form-label fw-bold m-0">Password</label>
-                                                    <input type="password" class="form-control"
-                                                           th:name="password"
-                                                           th:id="'editPassword'" required>
+                                                    <input type="password" class="form-control" th:name="password"
+                                                           id="editPassword" required>
                                                 </div>
                                                 <br>
                                                 <div class="form-row">
-                                                    <label th:for="'editRole'"
-                                                           class="form-label fw-bold m-0">Role</label>
-                                                    <select th:id="'editRole'" name="roles" multiple size="2"
+                                                    <label for="editRole" class="form-label fw-bold m-0">Role</label>
+                                                    <select id="editRole" name="roles" multiple size="2"
                                                             required
                                                             class="form-control form-control-sm">
                                                         <option value="ROLE_ADMIN">ADMIN</option>
@@ -166,9 +151,6 @@
                                     </div>
                                 </div>
 
-
-
-
                                 <div class="modal">
                                     <div class="modal-content">
                                         <span class="h4">Delete user</span>
@@ -177,69 +159,48 @@
                                         <div class="text-center">
                                             <form name="DeleteForm" th:object="${user}">
                                                 <div class="form-row">
-                                                    <label th:for="'deleteId'"
-                                                           class="form-label fw-bold m-0">ID</label>
-                                                    <input type="text" class="form-control "
-                                                           th:name="id"
-                                                           th:id="'deleteId'"
+                                                    <label for="deleteId" class="form-label fw-bold m-0">ID</label>
+                                                    <input type="text" class="form-control " th:name="id" id="deleteId"
                                                            disabled>
                                                 </div>
                                                 <br>
                                                 <div class="form-row">
-                                                    <label th:for="'deleteName'"
-                                                           class="form-label fw-bold m-0">First
+                                                    <label for="deleteName" class="form-label fw-bold m-0">First
                                                         name</label>
-                                                    <input type="text" class="form-control "
-                                                           th:name="name"
-
-                                                           th:id="'deleteName'"
-                                                           disabled>
+                                                    <input type="text" class="form-control " th:name="name"
+                                                           id="deleteName" disabled>
                                                 </div>
                                                 <br>
                                                 <div class="form-row">
-                                                    <label th:for="'deleteLastName'"
-                                                           class="form-label fw-bold m-0">Last
+                                                    <label for="deleteLastName" class="form-label fw-bold m-0">Last
                                                         name</label>
-                                                    <input type="text" class="form-control"
-                                                           th:name="lastName"
-
-                                                           th:id="'deleteLastName'"
-                                                           disabled>
+                                                    <input type="text" class="form-control" th:name="lastName"
+                                                           id="deleteLastName" disabled>
                                                 </div>
                                                 <br>
                                                 <div class="form-row">
-                                                    <label th:for="'deleteAge'"
-                                                           class="form-label fw-bold m-0">Age</label>
-                                                    <input type="number" class="form-control"
-                                                           th:name="age"
-                                                           th:id="'deleteAge'"
-                                                           th:max="255" disabled>
+                                                    <label for="deleteAge" class="form-label fw-bold m-0">Age</label>
+                                                    <input type="number" class="form-control" th:name="age"
+                                                           id="deleteAge" th:max="255" disabled>
                                                 </div>
                                                 <br>
                                                 <div class="form-row">
-                                                    <label th:for="'deleteEmail'"
+                                                    <label for="deleteEmail"
                                                            class="form-label fw-bold m-0">Email</label>
-                                                    <input type="email" class="form-control"
-                                                           th:name="email"
-
-                                                           th:id="'deleteEmail'"
-                                                           disabled>
+                                                    <input type="email" class="form-control" th:name="email"
+                                                           id="deleteEmail" disabled>
                                                 </div>
                                                 <br>
                                                 <div class="form-row">
-                                                    <label th:for="'deleteNPassword'"
+                                                    <label for="deletePassword"
                                                            class="form-label fw-bold m-0">Password</label>
-                                                    <input type="password" class="form-control"
-                                                           th:name="password"
-
-                                                           th:id="'deletePassword'"
-                                                           disabled>
+                                                    <input type="password" class="form-control" th:name="password"
+                                                           id="deletePassword" disabled>
                                                 </div>
                                                 <br>
                                                 <div class="form-row">
-                                                    <label th:for="'deleteRole'"
-                                                           class="form-label fw-bold m-0">Role</label>
-                                                    <select th:id="'deleteRole'"
+                                                    <label for="deleteRole" class="form-label fw-bold m-0">Role</label>
+                                                    <select id="deleteRole"
                                                             name="roles" multiple size="2" disabled
                                                             class="form-control form-control-sm">
                                                         <option value="ROLE_ADMIN">ADMIN</option>
@@ -258,10 +219,6 @@
                                         </div>
                                     </div>
                                 </div>
-
-
-
-
 
                             </div>
                         </div>
@@ -328,8 +285,8 @@
         integrity="sha384-/bQdsTh/da6pkI1MST/rWKFNjaCP5gBSY4sEBT38Q/9RBh9AH40zEOg7Hlq2THRZ"
         crossorigin="anonymous"></script>
 <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
-<script src="../static/js/fillTable.js" th:src="@{js/fillTable.js}"></script>
 <script src="../static/js/modalWindow.js" th:src="@{js/modalWindow.js}"></script>
+<script src="../static/js/fillTable.js" th:src="@{js/fillTable.js}"></script>
 <script src="../static/js/deleteUserRow.js" th:src="@{js/deleteUserRow.js}"></script>
 <script src="../static/js/addNewUserRow.js" th:src="@{js/addNewUserRow.js}"></script>
 <script src="../static/js/editUserRow.js" th:src="@{js/editUserRow.js}"></script>
