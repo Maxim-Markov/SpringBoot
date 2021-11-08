@@ -53,17 +53,14 @@ public class UserDaoImpl implements UserDao {
     @Override
     public void updateUser(long id, User user) {
         user.setId(id);
-        sessionFactory.getCurrentSession().saveOrUpdate(user);
+        sessionFactory.getCurrentSession().merge(user);
     }
 
     @Override
     public void deleteUser(long id) {
         User userFromDB = sessionFactory.getCurrentSession()
                 .find(User.class, id);
-        if (userFromDB != null) {
-            userFromDB.setRoles(null);
             sessionFactory.getCurrentSession().remove(userFromDB);
-        }
     }
 }
 

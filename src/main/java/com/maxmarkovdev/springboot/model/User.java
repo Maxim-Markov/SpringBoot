@@ -23,10 +23,10 @@ public class User implements UserDetails {
     private String email;
     private String password;
     @JsonManagedReference
-    @ManyToMany(cascade = {CascadeType.ALL},fetch = FetchType.EAGER)
+    @ManyToMany(cascade = {CascadeType.REFRESH,CascadeType.MERGE},fetch = FetchType.EAGER)
     @JoinTable(name = "users_roles",
             joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "role_role",referencedColumnName = "role"))
+            inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles = new HashSet<>();
     public User() {
     }

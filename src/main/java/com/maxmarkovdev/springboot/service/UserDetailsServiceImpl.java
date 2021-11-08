@@ -48,7 +48,6 @@ public class UserDetailsServiceImpl implements UserDetailsService, UserService {
         userDao.updateUser(id, user);
     }
 
-
     @Override
     @Transactional
     public void deleteUser(long id) {
@@ -60,5 +59,4 @@ public class UserDetailsServiceImpl implements UserDetailsService, UserService {
     public long createUser(User user) {
         return userDao.createUser(user);
     }
-
 }

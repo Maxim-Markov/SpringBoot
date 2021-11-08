@@ -1,6 +1,7 @@
 package com.maxmarkovdev.springboot.controller;
 import com.maxmarkovdev.springboot.model.Role;
 import com.maxmarkovdev.springboot.model.User;
+import com.maxmarkovdev.springboot.service.RoleService;
 import com.maxmarkovdev.springboot.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -18,10 +19,12 @@ import java.util.List;
 public class RestControllers {
 
     private UserService userService;
+    private RoleService roleService;
 
     @Autowired
-    public void setUserService(UserService userService) {
+    public void setUserService(UserService userService,RoleService roleService) {
         this.userService = userService;
+        this.roleService = roleService;
     }
 
     @DeleteMapping("/{id}")
@@ -40,7 +43,7 @@ public class RestControllers {
                                         @RequestParam("email") String email,
                                         @RequestParam("password") String password,
                                         @RequestParam("roles") String role) {
-        Role userRole = new Role(role);
+        Role userRole = roleService.getRoleByName(role);
         User user = new User(name,lastName,Byte.parseByte(age),email,password);
         user.addRole(userRole);
 
@@ -61,8 +64,7 @@ public class RestControllers {
                                            @RequestParam("password") String password,
                                            @RequestParam("roles") String role,
                                            @PathVariable("id") long id) {
-
-        Role userRole = new Role(role);
+        Role userRole = roleService.getRoleByName(role);
         User user = new User(name,lastName,Byte.parseByte(age),email,password);
         user.addRole(userRole);
         userService.updateUser(id, user);

@@ -15,15 +15,14 @@ import java.util.Set;
 public class Role implements GrantedAuthority {
 
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-    @Column(unique = true)
     @Id
+    private Long id;
+    @Column(nullable = false,unique = true)
     private String role;
 
     @JsonBackReference
-    @ManyToMany(mappedBy = "roles", fetch = FetchType.EAGER)
+    @ManyToMany(mappedBy = "roles", fetch = FetchType.EAGER, cascade = {CascadeType.REFRESH,CascadeType.REMOVE})
     private Set<User> users;
-
     public Role(String role) {
         this.role = role;
         users = new HashSet<>();
