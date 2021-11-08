@@ -1,5 +1,6 @@
 package com.maxmarkovdev.springboot.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -9,23 +10,24 @@ import java.util.*;
 // Для того, чтобы в дальнейшим использовать класс User в Spring Security, он должен реализовывать интерфейс UserDetails.
 // UserDetails можно представить, как адаптер между БД пользователей и тем что требуется Spring Security внутри SecurityContextHolder
 @Entity
-@Table(name = "users",uniqueConstraints = @UniqueConstraint(columnNames = "name"))
+@Table(name = "users")
 public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Column(unique = true)
     private String name; // уникальное значение
     @Column(name = "last_name")
     private String lastName;
     private byte age;
     private String email;
     private String password;
+    @JsonManagedReference
     @ManyToMany(cascade = {CascadeType.ALL},fetch = FetchType.EAGER)
     @JoinTable(name = "users_roles",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_role",referencedColumnName = "role"))
     private Set<Role> roles = new HashSet<>();
-
     public User() {
     }
 

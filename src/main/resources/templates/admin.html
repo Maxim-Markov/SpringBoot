@@ -112,7 +112,7 @@
                                                 <div class="form-row">
                                                     <label for="editAge" class="form-label fw-bold m-0">Age</label>
                                                     <input type="number" class="form-control" th:name="age" id="editAge"
-                                                           max="126" min="0" pattern="{01}{012}}[0-6]" required>
+                                                           max="126" min="0" pattern="({01}?{01}?/d)|(12[0-6])" required>
                                                 </div>
                                                 <br>
                                                 <div class="form-row">
@@ -181,7 +181,7 @@
                                                     <label for="deleteAge" class="form-label fw-bold m-0">Age</label>
                                                     <input type="number" class="form-control" th:name="age"
                                                            id="deleteAge" max="126"
-                                                           min="0" pattern="{01}{012}}[0-6]"  disabled>
+                                                           min="0" pattern="({01}?{01}?/d)|(12[0-6])"  disabled>
                                                 </div>
                                                 <br>
                                                 <div class="form-row">
@@ -246,7 +246,7 @@
                                         <label for="addAge" class="form-label fw-bold m-0">Age</label>
                                         <input type="number" class="form-control" th:field="*{age}" id="addAge"
                                                max="126"
-                                               min="0" pattern="{01}{012}}[0-6]"
+                                               min="0" pattern="({01}?{01}?/d)|(12[0-6])"
                                                required>
                                     </div>
                                     <br>

@@ -1,5 +1,6 @@
 package com.maxmarkovdev.springboot.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.security.core.GrantedAuthority;
 
@@ -10,14 +11,16 @@ import java.util.Set;
 // Этот класс реализует интерфейс GrantedAuthority, в котором необходимо переопределить только один метод getAuthority() (возвращает имя роли).
 // Имя роли должно соответствовать шаблону: «ROLE_ИМЯ», например, ROLE_USER.
 @Entity
-@Table(name = "roles",uniqueConstraints = @UniqueConstraint(columnNames = "role"))
+@Table(name = "roles")
 public class Role implements GrantedAuthority {
+
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Column(unique = true)
     @Id
     private String role;
 
-    @JsonIgnore
+    @JsonBackReference
     @ManyToMany(mappedBy = "roles", fetch = FetchType.EAGER)
     private Set<User> users;
 
