@@ -1,4 +1,5 @@
 package com.maxmarkovdev.springboot.controller;
+
 import com.maxmarkovdev.springboot.model.Role;
 import com.maxmarkovdev.springboot.model.User;
 import com.maxmarkovdev.springboot.service.RoleService;
@@ -22,31 +23,25 @@ public class RestControllers {
     private RoleService roleService;
 
     @Autowired
-    public void setUserService(UserService userService,RoleService roleService) {
+    public void setUserService(UserService userService, RoleService roleService) {
         this.userService = userService;
         this.roleService = roleService;
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> DeleteUser(@AuthenticationPrincipal User currentUser, @PathVariable("id") long id) {
-        if(id == currentUser.getId()){
-            return new ResponseEntity<>("You cannot delete yourself",HttpStatus.BAD_REQUEST);
+    public ResponseEntity<?> deleteUser(@AuthenticationPrincipal User currentUser, @PathVariable("id") long id) {
+        if (id == currentUser.getId()) {
+            return new ResponseEntity<>("You cannot delete yourself", HttpStatus.BAD_REQUEST);
         }
         userService.deleteUser(id);
-        return ResponseEntity.ok("Deleted");
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<?> createUser(@RequestParam("name") String name,
-                                        @RequestParam("lastName") String lastName,
-                                        @RequestParam("age") String age,
-                                        @RequestParam("email") String email,
-                                        @RequestParam("password") String password,
-                                        @RequestParam("roles") String role) {
-        Role userRole = roleService.getRoleByName(role);
-        User user = new User(name,lastName,Byte.parseByte(age),email,password);
+    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> createUser(@RequestBody User user) {
+        Role userRole = roleService.getRoleByName(user.getRoles().stream().findFirst().orElseThrow().getRole());
+        user.getRoles().clear();
         user.addRole(userRole);
-
         try {
             long id = userService.createUser(user);
             user.setId(id);
@@ -56,16 +51,20 @@ public class RestControllers {
         }
     }
 
-    @PatchMapping(value = "/{id}",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<User> UpdateUser(@RequestParam("name") String name,
+    @PatchMapping(value = "/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<?> updateUser(@AuthenticationPrincipal User currentUser,
+                                           @RequestParam("name") String name,
                                            @RequestParam("lastName") String lastName,
                                            @RequestParam("age") String age,
                                            @RequestParam("email") String email,
                                            @RequestParam("password") String password,
                                            @RequestParam("roles") String role,
                                            @PathVariable("id") long id) {
+        if (id == currentUser.getId()) {
+            return new ResponseEntity<>("You cannot delete yourself", HttpStatus.BAD_REQUEST);
+        }
         Role userRole = roleService.getRoleByName(role);
-        User user = new User(name,lastName,Byte.parseByte(age),email,password);
+        User user = new User(name, lastName, Byte.parseByte(age), email, password);
         user.addRole(userRole);
         userService.updateUser(id, user);
         return ResponseEntity.ok(user);
@@ -74,8 +73,6 @@ public class RestControllers {
     @GetMapping(value = "/users")
     public ResponseEntity<List<User>> getAllUser() {
         List<User> users = userService.getUsers();
-        return new ResponseEntity<>(users,HttpStatus.OK);
+        return new ResponseEntity<>(users, HttpStatus.OK);
     }
-
-
 }

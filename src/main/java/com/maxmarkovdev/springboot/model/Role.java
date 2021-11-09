@@ -2,7 +2,14 @@ package com.maxmarkovdev.springboot.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import javax.persistence.*;
 import java.util.HashSet;
@@ -16,9 +23,11 @@ public class Role implements GrantedAuthority {
 
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private Long id;
     @Column(nullable = false,unique = true)
     private String role;
+
 
     @JsonBackReference
     @ManyToMany(mappedBy = "roles", fetch = FetchType.EAGER, cascade = {CascadeType.REFRESH,CascadeType.REMOVE})
@@ -66,3 +75,16 @@ public class Role implements GrantedAuthority {
         return role;
     }
 }
+
+//    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
+//    public ResponseEntity<?> createUser(@RequestBody User user) {
+//        Role userRole = roleService.getRoleByName(user.getRoles().stream().findFirst().orElseThrow().getRole());
+//        user.addRole(userRole);
+//        try {
+//            long id = userService.createUser(user);
+//            user.setId(id);
+//            return ResponseEntity.ok().body(user);
+//        } catch (DataIntegrityViolationException e) {
+//            return new ResponseEntity<>("user with such email already exists", HttpStatus.BAD_REQUEST);
+//        }
+//    }

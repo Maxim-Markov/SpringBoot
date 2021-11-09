@@ -13,7 +13,7 @@ fetch('/admin/users', {
                             <td>${user.lastName}</td>
                             <td>${user.age}</td>
                             <td>${user.email}</td>
-                            <td>${user.password}</td>
+                            <td></td>
                             <td>${user.roles.map(curRole => curRole.role.slice(5)).join(",")}</td>        
                             <td>
                                 <button class="btn btn-info modal-btn">Edit</button>

@@ -3,10 +3,24 @@ let rows = document.getElementsByClassName("usersRow");//table with users
 
 formAdd.onsubmit = async (e) => {
     e.preventDefault();
+    let user = {
+        name: $("#addName").val(),
+        lastName: $("#addLastName").val(),
+        age: $("#addAge").val(),
+        email: $("#addEmail").val(),
+        password: $("#addPassword").val(),
+        roles: [
+            {role:$("#addRole").val()[0],},
+        ],
+    }
+
     fetch('/admin', {
         credentials: 'include',
         method: 'POST',
-        body: new FormData(formAdd),
+        headers: {
+            'Content-Type': 'application/json;charset=utf-8'
+        },
+        body: JSON.stringify(user),
     })
         .then(response => {
             if(response.status === 400){

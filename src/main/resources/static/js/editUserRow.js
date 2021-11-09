@@ -8,6 +8,10 @@ formEdit.onsubmit = async (e) => {
         method: 'PATCH',
         body: new FormData(formEdit),
     });
+    if (!response.ok) {
+        alert("Such name is already existing");
+        return;
+    }
     let user = await response.json();
     let rows = document.getElementsByClassName("usersRow");
     for (let i = 0; i < rows.length; i++) {
@@ -22,5 +26,6 @@ formEdit.onsubmit = async (e) => {
             rowToUpdate.cells[6].textContent = user.roles[0].role.slice(5);
         }
     }
-    formEdit.querySelector('.close').click()
+    formEdit.querySelector('.close').click();
+    $(".navbar-brand").html(`<b>${user.email}</b> with roles ${user.roles[0].role.slice(5)}`);
 }

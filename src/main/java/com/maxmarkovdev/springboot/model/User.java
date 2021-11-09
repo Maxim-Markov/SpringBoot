@@ -1,8 +1,12 @@
 package com.maxmarkovdev.springboot.model;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+
+import com.fasterxml.jackson.annotation.*;
+import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.persistence.*;
 import java.util.*;
@@ -10,10 +14,14 @@ import java.util.*;
 // Для того, чтобы в дальнейшим использовать класс User в Spring Security, он должен реализовывать интерфейс UserDetails.
 // UserDetails можно представить, как адаптер между БД пользователей и тем что требуется Spring Security внутри SecurityContextHolder
 @Entity
+@NoArgsConstructor
+@JsonIgnoreProperties(ignoreUnknown = true)
 @Table(name = "users")
 public class User implements UserDetails {
+    private static final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(4);
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private Long id;
     @Column(unique = true)
     private String name; // уникальное значение
@@ -21,22 +29,26 @@ public class User implements UserDetails {
     private String lastName;
     private byte age;
     private String email;
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
+
+
     @JsonManagedReference
     @ManyToMany(cascade = {CascadeType.REFRESH,CascadeType.MERGE},fetch = FetchType.EAGER)
     @JoinTable(name = "users_roles",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
+    @JsonIgnore
     private Set<Role> roles = new HashSet<>();
-    public User() {
-    }
+
+
 
     public User(String name, String lastName, byte age, String email, String password) {
         this.name = name;
         this.lastName = lastName;
         this.age = age;
         this.email = email;
-        this.password = password;
+        setPassword(password);
     }
 
     public Long getId() {
@@ -115,7 +127,7 @@ public class User implements UserDetails {
     }
 
     public void setPassword(String password) {
-        this.password = password;
+                this.password = passwordEncoder.encode(password);
     }
 
     public Set<Role> getRoles() {
