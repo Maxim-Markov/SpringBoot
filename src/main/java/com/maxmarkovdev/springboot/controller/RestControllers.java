@@ -47,7 +47,7 @@ public class RestControllers {
             user.setId(id);
             return ResponseEntity.ok().body(user);
         } catch (DataIntegrityViolationException e) {
-            return new ResponseEntity<>("user with such email already exists", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("user with such name already exists", HttpStatus.BAD_REQUEST);
         }
     }
 

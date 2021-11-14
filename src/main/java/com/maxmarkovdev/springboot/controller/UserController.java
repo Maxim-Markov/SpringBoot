@@ -8,6 +8,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 
 
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,7 +25,7 @@ public class UserController {
     }
 
     @GetMapping()
-    public String getUserPage(@AuthenticationPrincipal User user, ModelMap modelMap) {
+    public String getUserPage(@AuthenticationPrincipal User user, Model modelMap) {
         User userFromDB = (User) userService.loadUserByUsername(user.getUsername());
         modelMap.addAttribute("user", userFromDB);
         return "user";

@@ -9,7 +9,7 @@ formEdit.onsubmit = async (e) => {
         body: new FormData(formEdit),
     });
     if (!response.ok) {
-        alert("Such name is already existing");
+        alert("You cannot update yourself because you are authenticated now");
         return;
     }
     let user = await response.json();

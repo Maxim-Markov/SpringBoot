@@ -19,7 +19,7 @@ public class AdminController {
 
     private UserService userService;
 
-    @Autowired
+    @Autowired()
     public void setUserService(UserService userService) {
         this.userService = userService;
     }

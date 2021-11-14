@@ -25,6 +25,7 @@ public class BaseController {
     public String LoginOut(HttpServletRequest request, HttpServletResponse response) {
         SecurityContextLogoutHandler securityContextLogoutHandler = new SecurityContextLogoutHandler();
         securityContextLogoutHandler.logout(request,response,null);
+
         return "login";
     }
 }
