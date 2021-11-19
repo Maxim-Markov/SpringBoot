@@ -139,6 +139,7 @@
                                                 </div>
                                                 <br>
                                                 <hr>
+                                                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
                                                 <div class="text-end">
                                                     <input type="reset" class="btn btn-secondary close"
                                                            value="Close">
@@ -208,6 +209,7 @@
                                                 </div>
                                                 <br>
                                                 <hr>
+                                                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
                                                 <div class="text-end">
                                                     <input type="reset" class="btn btn-secondary close"
                                                            value="Close">
@@ -270,6 +272,7 @@
                                         </select>
                                     </div>
                                     <br>
+                                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
                                     <div class="h3">
                                         <button class="badge bg-success" type="submit">Add new user</button>
                                     </div>
