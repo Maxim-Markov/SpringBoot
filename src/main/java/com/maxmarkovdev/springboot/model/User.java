@@ -15,13 +15,11 @@ import java.util.*;
 // UserDetails можно представить, как адаптер между БД пользователей и тем что требуется Spring Security внутри SecurityContextHolder
 @Entity
 @NoArgsConstructor
-@JsonIgnoreProperties(ignoreUnknown = true)
 @Table(name = "users")
 public class User implements UserDetails {
     private static final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(4);
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private Long id;
     @Column(unique = true)
     private String name; // уникальное значение
@@ -29,16 +27,13 @@ public class User implements UserDetails {
     private String lastName;
     private byte age;
     private String email;
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
 
 
-    @JsonManagedReference
     @ManyToMany(cascade = {CascadeType.REFRESH,CascadeType.MERGE},fetch = FetchType.EAGER)
     @JoinTable(name = "users_roles",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
-    @JsonIgnore
     private Set<Role> roles = new HashSet<>();
 
 

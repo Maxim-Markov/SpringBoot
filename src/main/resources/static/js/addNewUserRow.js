@@ -8,7 +8,7 @@ formAdd.onsubmit = async (e) => {
         lastName: $("#addLastName").val(),
         age: $("#addAge").val(),
         email: $("#addEmail").val(),
-        password: $("#addPassword").val(),
+        pass: $("#addPassword").val(),
         roles: [
             {role:$("#addRole").val()[0],},
         ],
@@ -34,7 +34,7 @@ formAdd.onsubmit = async (e) => {
                     <td >${user.lastName}</td>
                     <td >${user.age}</td>
                     <td >${user.email}</td>
-                    <td >${user.password}</td>
+                    <td ></td>
                     <td >${user.roles[0].role.slice(5)}</td>
                     <td>
                         <button class="btn btn-info modal-btn">Edit</button>                                

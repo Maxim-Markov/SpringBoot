@@ -1,7 +1,9 @@
 package com.maxmarkovdev.springboot.controller;
 
+import com.maxmarkovdev.springboot.mapper.UserMapper;
 import com.maxmarkovdev.springboot.model.Role;
 import com.maxmarkovdev.springboot.model.User;
+import com.maxmarkovdev.springboot.dto.UserDTO;
 import com.maxmarkovdev.springboot.service.RoleService;
 import com.maxmarkovdev.springboot.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +11,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,16 +19,19 @@ import java.util.List;
 
 
 @RestController
+@Secured("ROLE_ADMIN")
 @RequestMapping("/admin")
 public class RestControllers {
 
+    private UserMapper userMapper;
     private UserService userService;
     private RoleService roleService;
 
     @Autowired
-    public void setUserService(UserService userService, RoleService roleService) {
+    public void setUserService(UserService userService, RoleService roleService, UserMapper userMapper) {
         this.userService = userService;
         this.roleService = roleService;
+        this.userMapper = userMapper;
     }
 
     @DeleteMapping("/{id}")
@@ -38,14 +44,15 @@ public class RestControllers {
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> createUser(@RequestBody User user) {
-        Role userRole = roleService.getRoleByName(user.getRoles().stream().findFirst().orElseThrow().getRole());
-        user.getRoles().clear();
-        user.addRole(userRole);
+    public ResponseEntity<?> createUser(@RequestBody UserDTO user) {
+        Role userRole = roleService.getRoleByName(user.getRoles().get(0).getRole());
+        User userEntity = userMapper.toModel(user);
+        userEntity.getRoles().clear();
+        userEntity.addRole(userRole);
         try {
-            long id = userService.createUser(user);
-            user.setId(id);
-            return ResponseEntity.ok().body(user);
+            long id = userService.createUser(userEntity);
+            userEntity.setId(id);
+            return ResponseEntity.ok().body(userMapper.toDto(userEntity));
         } catch (DataIntegrityViolationException e) {
             return new ResponseEntity<>("user with such name already exists", HttpStatus.BAD_REQUEST);
         }
@@ -67,12 +74,12 @@ public class RestControllers {
         User user = new User(name, lastName, Byte.parseByte(age), email, password);
         user.addRole(userRole);
         userService.updateUser(id, user);
-        return ResponseEntity.ok(user);
+        return ResponseEntity.ok(userMapper.toDto(user));
     }
 
     @GetMapping(value = "/users")
-    public ResponseEntity<List<User>> getAllUser() {
+    public ResponseEntity<List<UserDTO>> getAllUser() {
         List<User> users = userService.getUsers();
-        return new ResponseEntity<>(users, HttpStatus.OK);
+        return new ResponseEntity<>(userMapper.toDto(users), HttpStatus.OK);
     }
 }

@@ -22,7 +22,7 @@ formEdit.onsubmit = async (e) => {
             rowToUpdate.cells[2].textContent = user.lastName;
             rowToUpdate.cells[3].textContent = user.age;
             rowToUpdate.cells[4].textContent = user.email;
-            rowToUpdate.cells[5].textContent = user.password;
+            rowToUpdate.cells[5].textContent = user.pass;
             rowToUpdate.cells[6].textContent = user.roles[0].role.slice(5);
         }
     }

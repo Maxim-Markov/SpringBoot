@@ -2,10 +2,7 @@ package com.maxmarkovdev.springboot.config;
 
 import com.maxmarkovdev.springboot.model.Role;
 import com.maxmarkovdev.springboot.model.User;
-import com.maxmarkovdev.springboot.service.RoleService;
-import com.maxmarkovdev.springboot.service.UserService;
 import org.apache.tomcat.dbcp.dbcp2.BasicDataSource;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
