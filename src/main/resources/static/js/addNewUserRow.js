@@ -1,6 +1,8 @@
 let formAdd = document.getElementsByName("addForm")[0];//form in modal
 let rows = document.getElementsByClassName("usersRow");//table with users
 
+const addToken = $('#csrfAdd').attr('value');
+
 formAdd.onsubmit = async (e) => {
     e.preventDefault();
     let user = {
@@ -18,6 +20,7 @@ formAdd.onsubmit = async (e) => {
         credentials: 'include',
         method: 'POST',
         headers: {
+            'X-CSRF-TOKEN': addToken,
             'Content-Type': 'application/json;charset=utf-8'
         },
         body: JSON.stringify(user),

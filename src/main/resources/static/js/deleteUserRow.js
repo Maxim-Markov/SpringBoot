@@ -1,9 +1,15 @@
 let formDelete = document.getElementsByName("DeleteForm")[0];//form in modal
 
+
+const token = $('#csrfDelete').attr('value');
+
 formDelete.onsubmit = async (e) => {
     e.preventDefault();
     let id = formDelete[0].value;
     let response = await fetch('/admin/' + id, {
+            headers: {
+                'X-CSRF-TOKEN': token
+            },
         credentials: 'include',
         method: 'DELETE',
     });

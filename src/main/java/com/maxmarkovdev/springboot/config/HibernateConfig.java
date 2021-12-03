@@ -18,19 +18,19 @@ import java.util.Properties;
 @EnableTransactionManagement
 public class HibernateConfig {
 
-    @Value("${spring.driver-class-name}")
+    @Value("${spring.datasource.driver-class-name}")
     String driver;
-    @Value("${spring.url}")
+    @Value("${spring.datasource.url}")
     String url;
-    @Value("${spring.username}")
+    @Value("${spring.datasource.username}")
     String username;
-    @Value("${spring.password}")
+    @Value("${spring.datasource.password}")
     String password;
 
-    @Value("${spring.show-sql}")
+    @Value("${spring.jpa.show-sql}")
     private String SHOW_SQL;
 
-    @Value("${spring.ddl-auto}")
+    @Value("${spring.jpa.hibernate.ddl-auto}")
     private String HBM2DDL_AUTO;
 
     @Bean
