@@ -21,13 +21,11 @@ public class UserDetailsServiceImpl implements UserDetailsService, UserService {
         this.userDao = dao;
     }
 
-    // «Пользователь» – это просто Object. В большинстве случаев он может быть
-    //  приведен к классу UserDetails.
-    // Для создания UserDetails используется интерфейс UserDetailsService, с единственным методом:
     @Override
     @Transactional
     public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
-        return userDao.getUserByName(s);
+        return userDao.getUserByName(s)
+                .orElseThrow(() -> new UsernameNotFoundException("User with name: " + s + " not found"));
     }
 
     @Override

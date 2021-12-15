@@ -1,5 +1,6 @@
 package com.maxmarkovdev.springboot.dao;
 
+import com.maxmarkovdev.springboot.dao.util.SingleResultUtil;
 import com.maxmarkovdev.springboot.model.User;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -7,7 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.Query;
+import javax.persistence.TypedQuery;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public class UserDaoImpl implements UserDao {
@@ -20,14 +23,16 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public User getUserByName(String name) {
-        Query query = sessionFactory.getCurrentSession()
-                .createQuery("from User user where user.name = :userName");
-        query.setParameter("userName", name);
-        return (User) query.getSingleResult();
+    public Optional<User> getUserByName(String name) {
+        String hql = "FROM User u JOIN FETCH u.roles WHERE u.name = :userName";
+        TypedQuery<User> query = sessionFactory.getCurrentSession().createQuery(hql,User.class).setParameter("userName", name);
+        return SingleResultUtil.getSingleResultOrNull(query);
     }
-
-
+//
+//    Query query = sessionFactory.getCurrentSession()
+//            .createQuery("from User user where user.name = :userName");
+//        query.setParameter("userName", name);
+//        return (User) query.getSingleResult();
 
     @Override
     public long createUser(User user) {

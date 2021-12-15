@@ -5,6 +5,7 @@ services:
     build:
       context: services/postgres
       dockerfile: Dockerfile.development
+    image: maxxmarkov/postgres:latest
     ports:
       - "5433:5432"
     environment:
@@ -19,15 +20,15 @@ services:
       context: services/app
       dockerfile: Dockerfile.development
     environment:
-      - PORT=8080
+      - PORT=8081
       - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres/vv
       - DB_USER=postgres
       - DB_PASSWORD=qqq
       - DB_DRIVER=org.postgresql.Driver
       - JS_URL=http://localhost
-    image: 'my-java-application'
+    image: maxxmarkov/app:latest
     ports:
-      - "8080:8080"
+      - "8081:8081"
     depends_on:
       - postgres
 
