@@ -4,8 +4,8 @@ import com.maxmarkovdev.springboot.mapper.UserMapper;
 import com.maxmarkovdev.springboot.model.Role;
 import com.maxmarkovdev.springboot.model.User;
 import com.maxmarkovdev.springboot.dto.UserDTO;
-import com.maxmarkovdev.springboot.service.RoleService;
-import com.maxmarkovdev.springboot.service.UserService;
+import com.maxmarkovdev.springboot.service.interfaces.RoleService;
+import com.maxmarkovdev.springboot.service.interfaces.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
@@ -71,7 +71,7 @@ public class RestControllers {
             return new ResponseEntity<>("You cannot delete yourself", HttpStatus.BAD_REQUEST);
         }
         Role userRole = roleService.getRoleByName(role);
-        User user = new User(name, lastName, Byte.parseByte(age), email, password);
+        User user = new User(name, password, email, lastName, Byte.parseByte(age));
         user.addRole(userRole);
         userService.updateUser(id, user);
         return ResponseEntity.ok(userMapper.toDto(user));

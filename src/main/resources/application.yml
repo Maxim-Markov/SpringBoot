@@ -9,9 +9,24 @@ spring:
     driver-class-name: ${DB_DRIVER:com.mysql.cj.jdbc.Driver}
 
   jpa:
+
     hibernate:
       ddl-auto: create
     show-sql: true
+    open-in-view: false
+
+    properties:
+      hibernate:
+        jdbc:
+          batch_size: 20
+          batch_versioned_data: true
+          order_inserts: true
+          order_updates: true
+          enable_lazy_load_no_trans: false
+          format_sql: true
+          generate_statistics: true
+
+
 
 
 

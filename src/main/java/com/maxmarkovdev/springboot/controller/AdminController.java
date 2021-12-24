@@ -2,17 +2,13 @@ package com.maxmarkovdev.springboot.controller;
 
 
 import com.maxmarkovdev.springboot.model.User;
-import com.maxmarkovdev.springboot.service.UserService;
+import com.maxmarkovdev.springboot.service.interfaces.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.cassandra.CassandraProperties;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 @Controller
 @Secured("ROLE_ADMIN")

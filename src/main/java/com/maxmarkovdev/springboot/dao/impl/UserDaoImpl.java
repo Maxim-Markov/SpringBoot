@@ -1,5 +1,7 @@
-package com.maxmarkovdev.springboot.dao;
+package com.maxmarkovdev.springboot.dao.impl;
 
+import com.maxmarkovdev.springboot.dao.impl.astracts.ReadWriteDaoImpl;
+import com.maxmarkovdev.springboot.dao.interfaces.UserDao;
 import com.maxmarkovdev.springboot.dao.util.SingleResultUtil;
 import com.maxmarkovdev.springboot.model.User;
 import org.hibernate.Session;
@@ -7,13 +9,34 @@ import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import javax.persistence.Query;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import java.util.List;
 import java.util.Optional;
 
 @Repository
-public class UserDaoImpl implements UserDao {
+public class UserDaoImpl extends ReadWriteDaoImpl<User, Long> implements UserDao {
+
+    @PersistenceContext
+    private EntityManager entityManager;
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public Optional<User> findByEmail(String email) {
+        String hql = "FROM User u JOIN FETCH u.roles WHERE u.email = :email";
+        TypedQuery<User> query = (TypedQuery<User>) entityManager.createQuery(hql).setParameter("email", email);
+        return SingleResultUtil.getSingleResultOrNull(query);
+    }
+
+    @Override
+    public void changePassword(Long id, String password) {
+        String hql = "update User set password = :passwordParam where id = :idParam";
+        entityManager.createQuery(hql)
+                .setParameter("passwordParam", password)
+                .setParameter("idParam", id)
+                .executeUpdate();
+    }
 
     private final SessionFactory sessionFactory;
 
@@ -28,11 +51,6 @@ public class UserDaoImpl implements UserDao {
         TypedQuery<User> query = sessionFactory.getCurrentSession().createQuery(hql,User.class).setParameter("userName", name);
         return SingleResultUtil.getSingleResultOrNull(query);
     }
-//
-//    Query query = sessionFactory.getCurrentSession()
-//            .createQuery("from User user where user.name = :userName");
-//        query.setParameter("userName", name);
-//        return (User) query.getSingleResult();
 
     @Override
     public long createUser(User user) {

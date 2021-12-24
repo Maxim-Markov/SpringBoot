@@ -1,7 +1,5 @@
-package com.maxmarkovdev.springboot.config;
+package com.maxmarkovdev.springboot.configs;
 
-import com.maxmarkovdev.springboot.model.Role;
-import com.maxmarkovdev.springboot.model.User;
 import org.apache.tomcat.dbcp.dbcp2.BasicDataSource;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -12,7 +10,6 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import javax.sql.DataSource;
 import java.util.Properties;
-
 
 @Configuration
 @EnableTransactionManagement
@@ -51,7 +48,7 @@ public class HibernateConfig {
         hibernateProperties.put("hibernate.show_sql", SHOW_SQL);
         hibernateProperties.put("hibernate.hbm2ddl.auto", HBM2DDL_AUTO);
         factoryBean.setHibernateProperties(hibernateProperties);
-        factoryBean.setAnnotatedClasses(User.class, Role.class);
+        factoryBean.setPackagesToScan("com.maxmarkovdev.springboot.model");
         return factoryBean;
     }
 
@@ -61,6 +58,4 @@ public class HibernateConfig {
         transactionManager.setSessionFactory(getSessionFactory().getObject());
         return transactionManager;
     }
-
-
 }

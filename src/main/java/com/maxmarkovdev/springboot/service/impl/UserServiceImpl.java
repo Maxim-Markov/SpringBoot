@@ -1,24 +1,38 @@
-package com.maxmarkovdev.springboot.service;
+package com.maxmarkovdev.springboot.service.impl;
 
-import com.maxmarkovdev.springboot.dao.UserDao;
+import com.maxmarkovdev.springboot.dao.interfaces.UserDao;
 import com.maxmarkovdev.springboot.model.User;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.maxmarkovdev.springboot.service.impl.abstracts.ReadWriteServiceImpl;
+import com.maxmarkovdev.springboot.service.interfaces.UserService;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Service;
-
 
 import javax.transaction.Transactional;
 import java.util.List;
+import java.util.Optional;
 
 @Service
-public class UserDetailsServiceImpl implements UserDetailsService, UserService {
-    private UserDao userDao;
+public class UserServiceImpl extends ReadWriteServiceImpl<User, Long> implements UserDetailsService, UserService {
+    private final UserDao userDao;
 
-    @Autowired
-    public void setDao(UserDao dao) {
-        this.userDao = dao;
+    public UserServiceImpl(UserDao userDao) {
+        super(userDao);
+        this.userDao = userDao;
+    }
+
+    @Override
+    public Optional<User> findByEmail(String email) {
+        return userDao.findByEmail(email);
+    }
+
+    @Override
+    @org.springframework.transaction.annotation.Transactional
+    public void changePasswordById(Long id, String password) {
+        String passHash = BCrypt.hashpw(password, BCrypt.gensalt());
+        userDao.changePassword(id, passHash);
     }
 
     @Override
