@@ -25,20 +25,13 @@ public class Role implements GrantedAuthority {
     @Column(nullable = false,unique = true)
     private String role;
 
-    @ManyToMany(mappedBy = "roles", fetch = FetchType.EAGER, cascade = {CascadeType.REFRESH,CascadeType.REMOVE})
-    private Set<User> users;
+
     public Role(String role) {
         this.role = role;
-        users = new HashSet<>();
     }
 
     public Role() {
-        users = new HashSet<>();
-    }
 
-    public void addUser(User user) {
-        users.add(user);
-        user.getRoles().add(this);
     }
 
     @Override

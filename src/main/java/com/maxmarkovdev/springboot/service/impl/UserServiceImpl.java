@@ -29,7 +29,7 @@ public class UserServiceImpl extends ReadWriteServiceImpl<User, Long> implements
     }
 
     @Override
-    @org.springframework.transaction.annotation.Transactional
+    @Transactional
     public void changePasswordById(Long id, String password) {
         String passHash = BCrypt.hashpw(password, BCrypt.gensalt());
         userDao.changePassword(id, passHash);
@@ -44,31 +44,19 @@ public class UserServiceImpl extends ReadWriteServiceImpl<User, Long> implements
 
     @Override
     @Transactional
-    public List<User> getUsers() {
-        return userDao.getUsers();
+    public void updateById(long id, User user) {
+        userDao.updateById(id, user);
     }
 
-    @Override
-    @Transactional
-    public User getUser(long id) {
-        return userDao.getUser(id);
-    }
-
-    @Override
-    @Transactional
-    public void updateUser(long id, User user) {
-        userDao.updateUser(id, user);
-    }
-
-    @Override
-    @Transactional
-    public void deleteUser(long id) {
-        userDao.deleteUser(id);
-    }
 
     @Override
     @Transactional
     public long createUser(User user) {
         return userDao.createUser(user);
+    }
+
+    @Override
+    public List<User> getAll() {
+        return userDao.getAll();
     }
 }

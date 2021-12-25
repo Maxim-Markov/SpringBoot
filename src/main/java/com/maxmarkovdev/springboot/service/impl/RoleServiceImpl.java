@@ -11,6 +11,7 @@ import java.util.Optional;
 
 @Service
 public class RoleServiceImpl extends ReadWriteServiceImpl<Role, Long> implements RoleService {
+
     private final RoleDao roleDao;
 
     public RoleServiceImpl(RoleDao roleDao) {
@@ -19,21 +20,8 @@ public class RoleServiceImpl extends ReadWriteServiceImpl<Role, Long> implements
     }
 
     @Override
-    @org.springframework.transaction.annotation.Transactional
+    @Transactional
     public Optional<Role> findRoleByName(String name) {
         return roleDao.findByName(name);
-    }
-
-    @Transactional
-    @Override
-    public Role getRoleByName(String role) {
-        return roleDao.getRoleByName(role);
-    }
-
-    @Transactional
-    @Override
-    public void createRole(Role role) {
-        roleDao.createRole(role);
-
     }
 }

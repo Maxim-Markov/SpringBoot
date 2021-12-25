@@ -24,8 +24,8 @@ import java.util.Set;
 @Table(name = "users")
 public class User implements UserDetails {
     private static final long serialVersionUID = 8086496705293852501L;
-
     private static final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -82,7 +82,7 @@ public class User implements UserDetails {
     @Column
     private String nickname;
 
-    @ManyToMany(cascade = {CascadeType.REFRESH,CascadeType.MERGE},fetch = FetchType.EAGER)
+    @ManyToMany(cascade = {CascadeType.REFRESH,CascadeType.MERGE},fetch = FetchType.LAZY,targetEntity = Role.class)
     @JoinTable(name = "users_roles",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
@@ -122,7 +122,6 @@ public class User implements UserDetails {
 
     public void addRole(Role role) {
         roles.add(role);
-        role.getUsers().add(this);
     }
 
     @Override

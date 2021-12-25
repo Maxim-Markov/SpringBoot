@@ -1,4 +1,4 @@
-package com.maxmarkovdev.springboot.mapper;
+package com.maxmarkovdev.springboot.mappers;
 
 import com.maxmarkovdev.springboot.dto.UserDTO;
 import com.maxmarkovdev.springboot.model.User;
@@ -11,6 +11,7 @@ import java.util.List;
 
 @Mapper(componentModel = "spring",uses = {RoleMapper.class})
 public interface UserMapper {
+
     @Mapping(source = "user.password", target = "pass")
     UserDTO toDto(User user);
 

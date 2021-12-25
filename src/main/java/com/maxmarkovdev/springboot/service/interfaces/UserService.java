@@ -17,11 +17,9 @@ public interface UserService extends ReadWriteService<User, Long> {
 
     UserDetails loadUserByUsername(String s);
 
-    List<User> getUsers();
+    void updateById(long id, User user);
 
-    User getUser(long id);
+    @Override
+    List<User> getAll();
 
-    void updateUser(long id, User user);
-
-    void deleteUser(long id);
 }

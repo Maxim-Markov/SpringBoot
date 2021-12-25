@@ -21,7 +21,7 @@ public abstract class ReadOnlyDaoImpl<E, K> {
 
     @SuppressWarnings("unchecked") //because row use of List is bad practice
     public List<E> getAll() {
-        return (List<E>) entityManager.createQuery("from " + clazz.getName()).getResultList();
+        return (List<E>) entityManager.createQuery("FROM " + clazz.getName()).getResultList();
     }
 
     public boolean existsById(K id) {
@@ -39,7 +39,7 @@ public abstract class ReadOnlyDaoImpl<E, K> {
     @SuppressWarnings("unchecked") //because row use of List is bad practice
     public List<E> getAllByIds(Iterable<K> ids) {
         if (ids != null && ids.iterator().hasNext()) {
-            return (List<E>) entityManager.createQuery("from " + clazz.getName() + " e WHERE e.id IN :ids")
+            return (List<E>) entityManager.createQuery("FROM " + clazz.getName() + " e WHERE e.id IN :ids")
                     .setParameter("ids", ids).getResultList();
         } else {
             return new ArrayList<>();
@@ -48,7 +48,7 @@ public abstract class ReadOnlyDaoImpl<E, K> {
 
     public boolean existsByAllIds(Collection<K> ids) {
         if (ids != null && ids.size() > 0) {
-            Long count = (Long) entityManager.createQuery("select count(*) from " + clazz.getName() + " e WHERE e.id IN :ids")
+            Long count = (Long) entityManager.createQuery("SELECT COUNT(*) FROM " + clazz.getName() + " e WHERE e.id IN :ids")
                     .setParameter("ids", ids).getSingleResult();
             return ids.size() == count;
         }

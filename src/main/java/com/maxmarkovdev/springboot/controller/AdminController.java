@@ -24,7 +24,7 @@ public class AdminController {
 
     @GetMapping()
     public String getAdminPage(@AuthenticationPrincipal User currentUser, @ModelAttribute("user") User user, ModelMap model) {
-        model.addAttribute("users", userService.getUsers());
+        model.addAttribute("users", userService.getAll());
         User userFromDB = (User) userService.loadUserByUsername(currentUser.getUsername());
         model.addAttribute("currentUser", userFromDB);
         return "admin";

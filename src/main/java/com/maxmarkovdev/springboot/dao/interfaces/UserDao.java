@@ -16,11 +16,8 @@ public interface UserDao extends ReadWriteDao<User, Long> {
 
     long createUser(User user);
 
-    List<User> getUsers();
+    void updateById(long id, User user);
 
-    User getUser(long id);
-
-    void updateUser(long id, User user);
-
-    void deleteUser(long id);
+    @Override
+    List<User> getAll();
 }

@@ -12,9 +12,11 @@ import javax.validation.constraints.NotBlank;
 @AllArgsConstructor
 @ApiModel(description = "A JSON object containing user login and password")
 public class AuthenticationRequestDto {
+
     @NotBlank(message = "Username cannot be empty")
     @ApiModelProperty(example = "your username", required = true)
     private String username;
+
     @NotBlank(message = "Password cannot be empty")
     @ApiModelProperty(example = "your password", required = true)
     private String password;

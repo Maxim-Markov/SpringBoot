@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.Collection;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class TagServiceImpl extends ReadWriteServiceImpl<Tag, Long> implements TagService {
@@ -18,16 +17,6 @@ public class TagServiceImpl extends ReadWriteServiceImpl<Tag, Long> implements T
     public TagServiceImpl(TagDao tagDao) {
         super(tagDao);
         this.tagDao = tagDao;
-    }
-
-    @Override
-    public boolean existsByName(String name) {
-        return tagDao.existsByName(name);
-    }
-
-    @Override
-    public Optional<Tag> getByName(String name) {
-        return tagDao.getByName(name);
     }
 
     @Override

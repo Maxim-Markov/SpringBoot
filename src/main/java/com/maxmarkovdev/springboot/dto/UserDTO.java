@@ -9,6 +9,7 @@ import java.util.List;
 @Component
 @NoArgsConstructor
 public class UserDTO {
+
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private Long id;
 
@@ -19,6 +20,7 @@ public class UserDTO {
     private String age;
 
     private String email;
+
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String pass;
 

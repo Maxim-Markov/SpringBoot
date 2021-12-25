@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 @Secured("ROLE_USER")
-@RequestMapping("/user")
+@RequestMapping("/user1")
 public class UserController {
 
     private UserService userService;

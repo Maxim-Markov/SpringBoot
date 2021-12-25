@@ -5,7 +5,6 @@ import com.maxmarkovdev.springboot.model.dto.AuthenticationRequestDto;
 import com.maxmarkovdev.springboot.model.reputation.Reputation;
 import com.maxmarkovdev.springboot.model.reputation.ReputationType;
 import com.maxmarkovdev.springboot.service.interfaces.*;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -187,11 +186,11 @@ public class TestDataInitService {
         fillPermanentUserParameters();
         List<User> users = new ArrayList<>();
         for (int i = 0; i < usersNum; i++) {
-            String email = (i < permanentUserParameters.size())
+            String name = (i < permanentUserParameters.size())
                     ? permanentUserParameters.get(i).getUsername()
-                    : getRand(firstNames).toLowerCase() + "@" + getRand(domains) + "." + getRand(domainCodes);
-        String fullName = getRand(firstNames) + " " +
-                getRand(middleNames) + " " + getRand(lastNames);
+                    : getRand(firstNames) + getRand(middleNames) + getRand(lastNames);
+        String email = getRand(firstNames).toLowerCase() + "@" +
+                getRand(domains) + "." + getRand(domainCodes);
             String password = (i < permanentUserParameters.size())
                     ? permanentUserParameters.get(i).getPassword()
                     : getRandStr(4, 20);
@@ -201,9 +200,9 @@ public class TestDataInitService {
         String linkVk = "https://vk.com/" + getRandStr(1, 30);
         String about = getRand(abouts);
         String imageLink = getRandStr(10, 100);
-        String nickname = fullName.substring(0, 3);
+        String nickname = email.substring(0, 3);
 
-        users.add(new User(email, password, fullName, city,
+        users.add(new User(name, password, email, city,
                 linkSite, linkGithub, linkVk, about, imageLink, nickname));
     }
 
@@ -215,7 +214,6 @@ public class TestDataInitService {
                 users.get(i).setRoles(Collections.singleton(existingRoles.get(getRandInt(0, existingRoles.size()))));
             }
         }
-
 
         userService.persistAll(users);
 }

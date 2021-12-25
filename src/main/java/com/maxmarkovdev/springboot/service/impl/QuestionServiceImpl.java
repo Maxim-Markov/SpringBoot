@@ -29,10 +29,13 @@ public class QuestionServiceImpl extends ReadWriteServiceImpl<Question, Long> im
     }
 
     @Override
-    public Long countQuestions() { return questionDao.countQuestions();}
+    public Long countQuestions() {
+        return questionDao.countQuestions();
+    }
 
+    // Если в вопросе содержаться тэги, то сохранить несуществующие в БД
     @Override
-    public void persist(Question question){
+    public void persist(Question question) {
 
         Set<String> tagNames = question.getTags().stream().map(Tag::getName).collect(Collectors.toSet());
 
@@ -42,7 +45,7 @@ public class QuestionServiceImpl extends ReadWriteServiceImpl<Question, Long> im
         List<Tag> tagsToPersist = question.getTags();
         tagsToPersist.removeIf(tag -> existedTagNames.contains(tag.getName()));
 
-        if(!tagsToPersist.isEmpty()) {
+        if (!tagsToPersist.isEmpty()) {
             tagService.persistAll(tagsToPersist);
         }
         List<Tag> managedTags = new ArrayList<>(tagsToPersist);

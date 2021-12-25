@@ -7,6 +7,4 @@ import java.util.Optional;
 
 public interface RoleService extends ReadWriteService<Role, Long> {
     Optional<Role> findRoleByName(String name);
-    Role getRoleByName(String role);
-    void createRole(Role role);
 }

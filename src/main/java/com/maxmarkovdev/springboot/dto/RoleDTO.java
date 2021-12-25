@@ -9,5 +9,4 @@ import org.springframework.stereotype.Component;
 @NoArgsConstructor
 public class RoleDTO {
     private String role;
-
 }

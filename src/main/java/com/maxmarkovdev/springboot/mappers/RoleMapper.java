@@ -1,4 +1,4 @@
-package com.maxmarkovdev.springboot.mapper;
+package com.maxmarkovdev.springboot.mappers;
 
 import com.maxmarkovdev.springboot.dto.RoleDTO;
 import com.maxmarkovdev.springboot.model.Role;
@@ -10,5 +10,4 @@ public interface RoleMapper {
     RoleDTO toDto(Role role);
 
     Role toModel(RoleDTO roleDTO);
-
 }
