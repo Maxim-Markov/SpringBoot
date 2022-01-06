@@ -20,19 +20,19 @@ public class UserDaoImpl extends ReadWriteDaoImpl<User, Long> implements UserDao
     private SessionFactory sessionFactory;
 
     @Override
-    public Optional<User> findByEmail(String email) {
-        String hql = "FROM User u JOIN FETCH u.roles WHERE u.email = :email";
+    public Optional<User> findByName(String name) {
+        String hql = "FROM User u JOIN FETCH u.roles WHERE u.name = :name";
         TypedQuery<User> query = sessionFactory.getCurrentSession()
-                .createQuery(hql,User.class).setParameter("email", email);
+                .createQuery(hql, User.class).setParameter("name", name);
         return SingleResultUtil.getSingleResultOrNull(query);
     }
 
     @Override
-    public void changePassword(Long id, String password) {
-        String hql = "UPDATE User SET password = :passwordParam WHERE id = :idParam";
+    public void changePassword(String username, String password) {
+        String hql = "UPDATE User SET password = :passwordParam WHERE name = :nameParam";
         sessionFactory.getCurrentSession().createQuery(hql)
                 .setParameter("passwordParam", password)
-                .setParameter("idParam", id)
+                .setParameter("nameParam", username)
                 .executeUpdate();
     }
 

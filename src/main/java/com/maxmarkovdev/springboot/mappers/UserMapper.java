@@ -1,6 +1,6 @@
 package com.maxmarkovdev.springboot.mappers;
 
-import com.maxmarkovdev.springboot.dto.UserDTO;
+import com.maxmarkovdev.springboot.model.dto.User1DTO;
 import com.maxmarkovdev.springboot.model.User;
 import org.mapstruct.InheritInverseConfiguration;
 import org.mapstruct.Mapper;
@@ -13,12 +13,12 @@ import java.util.List;
 public interface UserMapper {
 
     @Mapping(source = "user.password", target = "pass")
-    UserDTO toDto(User user);
+    User1DTO toDto(User user);
 
     @InheritInverseConfiguration
-    User toModel(UserDTO userDTO);
+    User toModel(User1DTO userDTO);
 
-    List<UserDTO> toDto(List<User> users);
+    List<User1DTO> toDto(List<User> users);
 
-    List<User> toModel(List<UserDTO> userDTO);
+    List<User> toModel(List<User1DTO> userDTO);
 }

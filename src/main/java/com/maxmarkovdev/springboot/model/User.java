@@ -4,6 +4,7 @@ import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.Type;
 import org.hibernate.annotations.UpdateTimestamp;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -24,7 +25,6 @@ import java.util.Set;
 @Table(name = "users")
 public class User implements UserDetails {
     private static final long serialVersionUID = 8086496705293852501L;
-    private static final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -51,9 +51,11 @@ public class User implements UserDetails {
     private LocalDateTime persistDateTime;
 
     @Column(name = "is_enabled")
+    @Type(type = "org.hibernate.type.BooleanType")
     private Boolean isEnabled = true;
 
     @Column(name = "is_deleted")
+    @Type(type = "org.hibernate.type.BooleanType")
     private Boolean isDeleted = false;
 
     @Column
@@ -112,7 +114,7 @@ public class User implements UserDetails {
     }
 
     public void setPassword(String password) {
-        this.password = passwordEncoder.encode(password);
+        this.password = password;
     }
 
     @Override

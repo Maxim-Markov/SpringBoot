@@ -7,7 +7,9 @@ import com.maxmarkovdev.springboot.model.User;
 import com.maxmarkovdev.springboot.service.impl.abstracts.ReadWriteServiceImpl;
 import com.maxmarkovdev.springboot.service.interfaces.QuestionService;
 import com.maxmarkovdev.springboot.service.interfaces.TagService;
+import com.maxmarkovdev.springboot.service.interfaces.UserService;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -20,12 +22,14 @@ public class QuestionServiceImpl extends ReadWriteServiceImpl<Question, Long> im
 
     private final QuestionDao questionDao;
     private final TagService tagService;
+    private final UserService userService;
 
 
-    public QuestionServiceImpl(QuestionDao questionDao, TagService tagService) {
+    public QuestionServiceImpl(QuestionDao questionDao, TagService tagService, UserService userService) {
         super(questionDao);
         this.tagService = tagService;
         this.questionDao = questionDao;
+        this.userService = userService;
     }
 
     @Override
@@ -51,7 +55,8 @@ public class QuestionServiceImpl extends ReadWriteServiceImpl<Question, Long> im
         List<Tag> managedTags = new ArrayList<>(tagsToPersist);
         managedTags.addAll(existedTags);
         question.setTags(managedTags);
-        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String username = ((UserDetails) (SecurityContextHolder.getContext().getAuthentication().getPrincipal())).getUsername();
+        User user = userService.findByName(username).orElse(null);
         question.setUser(user);
 
         super.persist(question);

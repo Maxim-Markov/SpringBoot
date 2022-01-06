@@ -1,7 +1,7 @@
 package com.maxmarkovdev.springboot.mappers;
 
-import com.maxmarkovdev.springboot.dto.RoleDTO;
 import com.maxmarkovdev.springboot.model.Role;
+import com.maxmarkovdev.springboot.model.dto.RoleDTO;
 import org.mapstruct.Mapper;
 
 

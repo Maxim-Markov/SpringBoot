@@ -61,6 +61,7 @@ public class Question implements Serializable {
     private LocalDateTime lastUpdateDateTime;
 
     @Column(name = "is_deleted")
+    @Type(type = "org.hibernate.type.BooleanType")
     private Boolean isDeleted;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "question", orphanRemoval = true)

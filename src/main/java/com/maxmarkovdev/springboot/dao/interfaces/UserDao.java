@@ -8,9 +8,9 @@ import java.util.Optional;
 
 
 public interface UserDao extends ReadWriteDao<User, Long> {
-    Optional<User> findByEmail(String email);
+    Optional<User> findByName(String email);
 
-    void changePassword(Long id, String password);
+    void changePassword(String username, String password);
 
     Optional<User> getUserByName(String name);
 

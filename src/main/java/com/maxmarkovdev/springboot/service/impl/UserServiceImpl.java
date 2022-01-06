@@ -24,15 +24,16 @@ public class UserServiceImpl extends ReadWriteServiceImpl<User, Long> implements
     }
 
     @Override
-    public Optional<User> findByEmail(String email) {
-        return userDao.findByEmail(email);
+    @Transactional
+    public Optional<User> findByName(String name) {
+        return userDao.findByName(name);
     }
 
     @Override
     @Transactional
-    public void changePasswordById(Long id, String password) {
+    public void changePasswordByName(String username, String password) {
         String passHash = BCrypt.hashpw(password, BCrypt.gensalt());
-        userDao.changePassword(id, passHash);
+        userDao.changePassword(username, passHash);
     }
 
     @Override

@@ -1,5 +1,6 @@
 package com.maxmarkovdev.springboot.security;
 
+import com.maxmarkovdev.springboot.controllers.ExceptionHandlerFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Configuration;
@@ -10,17 +11,19 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter implements WebMvcConfigurer {
-    private final BCryptPasswordEncoder passwordEncoder; // кодировщик паролей
+    private final PasswordEncoder passwordEncoder; // кодировщик паролей
     private final UserDetailsService userDetailsService; // сервис, с помощью которого тащим пользователя
     private final SuccessUserHandler successUserHandler; // класс, в котором описана логика перенаправления пользователей по ролям
 
-    public SecurityConfig(BCryptPasswordEncoder passwordEncoder, @Qualifier("userServiceImpl") UserDetailsService userDetailsService, SuccessUserHandler successUserHandler) {
+    public SecurityConfig(PasswordEncoder passwordEncoder, @Qualifier("userServiceImpl") UserDetailsService userDetailsService, SuccessUserHandler successUserHandler) {
         this.passwordEncoder = passwordEncoder;
         this.userDetailsService = userDetailsService;
         this.successUserHandler = successUserHandler;
@@ -34,6 +37,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter implements WebM
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         // csrf защита включена
+        http.cors().disable();
         http.authorizeRequests()
                 .antMatchers("/**","/js/**","/images/**", "/css/**").permitAll() // доступность всем
                 .antMatchers("/user1").access("hasAnyRole('USER','ADMIN')")
@@ -42,6 +46,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter implements WebM
                 .and().formLogin()
                 // Spring сам подставит свою login форму
                 .successHandler(successUserHandler); // подключаем наш SuccessHandler для перенаправления по ролям
+        http.addFilterBefore(new ExceptionHandlerFilter(), UsernamePasswordAuthenticationFilter.class);
     }
 
     @Override
