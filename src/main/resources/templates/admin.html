@@ -69,7 +69,6 @@
                                     <tr>
                                         <th scope="col">Id</th>
                                         <th scope="col">Name</th>
-                                        <th scope="col">Last name</th>
                                         <th scope="col">Age</th>
                                         <th scope="col">Email</th>
                                         <th scope="col">Password</th>
@@ -100,13 +99,6 @@
                                                         name</label>
                                                     <input type="text" class="form-control" th:name="name" id="editName"
                                                            required>
-                                                </div>
-                                                <br>
-                                                <div class="form-row">
-                                                    <label for="editLastName" class="form-label fw-bold m-0">Last
-                                                        name</label>
-                                                    <input type="text" class="form-control" th:name="lastName"
-                                                           id="editLastName" required>
                                                 </div>
                                                 <br>
                                                 <div class="form-row">
@@ -172,13 +164,6 @@
                                                 </div>
                                                 <br>
                                                 <div class="form-row">
-                                                    <label for="deleteLastName" class="form-label fw-bold m-0">Last
-                                                        name</label>
-                                                    <input type="text" class="form-control" th:name="lastName"
-                                                           id="deleteLastName" disabled>
-                                                </div>
-                                                <br>
-                                                <div class="form-row">
                                                     <label for="deleteAge" class="form-label fw-bold m-0">Age</label>
                                                     <input type="number" class="form-control" th:name="age"
                                                            id="deleteAge" max="126" disabled>
@@ -234,12 +219,6 @@
                                     <div class="form-row">
                                         <label for="addName" class="form-label fw-bold m-0">First name</label>
                                         <input type="text" class="form-control" th:field="*{name}" id="addName"
-                                               required>
-                                    </div>
-                                    <br>
-                                    <div class="form-row">
-                                        <label for="addLastName" class="form-label fw-bold m-0">Last name</label>
-                                        <input type="text" class="form-control" th:field="*{lastName}" id="addLastName"
                                                required>
                                     </div>
                                     <br>

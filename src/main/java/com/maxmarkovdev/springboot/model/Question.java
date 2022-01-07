@@ -27,7 +27,7 @@ public class Question implements Serializable {
 
     private static final long serialVersionUID = -4612026867697897418L;
     @Id
-    @GeneratedValue(generator = "Question_seq")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column

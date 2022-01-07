@@ -16,15 +16,11 @@ async function sendUrlAndNumberOfRows(sentUrl, rowsCount) {
     await setupPagination(pagination_element)
 }
 
-let token = "Bearer " + $.cookie("jwt_token")
-
 async function getTotalCountOfItems() {
     let getTotalItems = await fetch(url + keyOfCurrentPage + valueOfCurrentPage, {
         method: "GET",
+        credentials: 'include',
         contentType: "application/json",
-        headers: {
-            "Authorization": token
-        }
     })
     let getTotalItemsObject = await getTotalItems.json()
     return getTotalItemsObject['totalResultCount']
@@ -33,10 +29,8 @@ async function getTotalCountOfItems() {
 async function getItemsForPage() {
     let itemsForPage = await fetch (url + keyOfCurrentPage + valueOfCurrentPage + keyCountOfItems + valueOfCountItems, {
         method: "GET",
+        credentials: 'include',
         contentType: "application/json",
-        headers: {
-            "Authorization": token
-        }
     })
     let itemsOnPage = await itemsForPage.json()
     return itemsOnPage["items"]

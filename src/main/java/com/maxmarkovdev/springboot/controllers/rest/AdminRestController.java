@@ -60,7 +60,6 @@ public class AdminRestController {
     @PatchMapping(value = "/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> updateUser(@AuthenticationPrincipal User currentUser,
                                         @RequestParam("name") String name,
-                                        @RequestParam("lastName") String lastName,
                                         @RequestParam("age") String age,
                                         @RequestParam("email") String email,
                                         @RequestParam("password") String password,
@@ -68,7 +67,7 @@ public class AdminRestController {
                                         @PathVariable("id") long id) {
         if (id != currentUser.getId()) {
             Role userRole = roleService.findRoleByName(role).orElse(null);
-            User user = new User(name, password, email, lastName, Byte.parseByte(age));
+            User user = new User(name, password, email, Byte.parseByte(age));
             user.addRole(userRole);
             userService.updateById(id, user);
             return ResponseEntity.ok(userMapper.toDto(user));

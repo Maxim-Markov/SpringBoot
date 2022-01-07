@@ -7,7 +7,6 @@ formAdd.onsubmit = async (e) => {
     e.preventDefault();
     let user = {
         name: $("#addName").val(),
-        lastName: $("#addLastName").val(),
         age: $("#addAge").val(),
         email: $("#addEmail").val(),
         pass: $("#addPassword").val(),
@@ -34,7 +33,6 @@ formAdd.onsubmit = async (e) => {
             let html = `<tr class="usersRow">
                     <td >${user.id}</td>
                     <td >${user.name}</td>
-                    <td >${user.lastName}</td>
                     <td >${user.age}</td>
                     <td >${user.email}</td>
                     <td ></td>

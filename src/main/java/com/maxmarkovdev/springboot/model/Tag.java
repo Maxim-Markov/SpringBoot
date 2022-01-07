@@ -25,7 +25,7 @@ public class Tag implements Serializable {
 
     private static final long serialVersionUID = 6264105282197120461L;
     @Id
-    @GeneratedValue(generator = "Tag_seq")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @NotNull
@@ -33,6 +33,7 @@ public class Tag implements Serializable {
     private String name;
 
     @Column
+    @Type(type = "org.hibernate.type.TextType")
     private String description;
 
     @CreationTimestamp

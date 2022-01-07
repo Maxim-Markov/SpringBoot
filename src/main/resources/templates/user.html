@@ -54,7 +54,6 @@
                         <tr>
                             <th scope="col">ID</th>
                             <th scope="col">First name</th>
-                            <th scope="col">Last name</th>
                             <th scope="col">Age</th>
                             <th scope="col">Email</th>
                             <th scope="col">Role</th>
@@ -64,7 +63,6 @@
                         <tr>
                             <td th:text="${user.getId()}">1</td>
                             <td th:text="${user.getUsername()}">Maxim</td>
-                            <td th:text="${user.getLastName()}">Markov</td>
                             <td th:text="${user.getAge()}">14</td>
                             <td th:text="${user.getEmail()}">test@gmail.com</td>
                             <td th:each="role,iter : ${user.getRoles()}"

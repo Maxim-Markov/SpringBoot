@@ -1,12 +1,6 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js"
-            integrity="sha384-/bQdsTh/da6pkI1MST/rWKFNjaCP5gBSY4sEBT38Q/9RBh9AH40zEOg7Hlq2THRZ"
-            crossorigin="anonymous"></script>
-    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
-    <script type="text/javascript" src="/static/js/libs/jquery.cookie.js" th:src="@{/js/libs/jquery.cookie.js}"></script>
-    <script src="/static/js/authorization_check.js" th:src="@{/js/authorization_check.js}"></script>
     <meta charset="UTF-8">
     <title>Профиль</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
@@ -44,11 +38,8 @@
         <div class="container ml-3 mt-5">
             <div class="row">
                 <div class="my-auto mr-2">
-                    <a href="/*">
-                        <img
-                                src="https://lh3.googleusercontent.com/a-/AOh14GgBh42YYQEzixOX5FbvcDyKCzjJUqJ7YGfJDbk5-w=k-s192"
+                        <img src="https://lh3.googleusercontent.com/a-/AOh14GgBh42YYQEzixOX5FbvcDyKCzjJUqJ7YGfJDbk5-w=k-s192"
                                 alt="картинка пользователя" width="128" height="128" class="rounded-lg">
-                    </a>
                 </div>
 
                 <div class="col-9 my-auto pl-0">
@@ -103,7 +94,7 @@
 
         <div class="justify-between fw-wrap m-3 ">
             <div class="s-navigation">
-                <a href="/*" class="s-navigation--item is-selected">Профиль</a>
+                <a href="/user" class="s-navigation--item is-selected">Профиль</a>
                 <a href="/*" class="s-navigation--item">Активность</a>
                 <a href="/*" class="s-navigation--item">Настройки</a>
             </div>
@@ -219,7 +210,7 @@
                                         чтобы заработать первый.
                                     </div>
                                     <div class="ta-center">
-                                        <a href="/*" class="s-btn s-btn__filled">Задать вопрос</a>
+                                        <a href="/question/ask" class="s-btn s-btn__filled">Задать вопрос</a>
                                     </div>
                                 </div>
 
@@ -310,7 +301,10 @@
 <footer class="footer mt-auto bg-light" style="margin-left: 200px">
     <jm-footer></jm-footer>
 </footer>
-</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-/bQdsTh/da6pkI1MST/rWKFNjaCP5gBSY4sEBT38Q/9RBh9AH40zEOg7Hlq2THRZ"
+        crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
 <script type="text/javascript" src="/static/js/header.js" th:src="@{/js/header.js}"></script>
 <script type="text/javascript" src="/static/js/sidebar.js" th:src="@{/js/sidebar.js}"></script>
 <script type="text/javascript" src="/static/js/footer.js" th:src="@{/js/footer.js}"></script>

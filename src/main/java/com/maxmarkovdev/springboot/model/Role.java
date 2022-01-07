@@ -2,6 +2,7 @@ package com.maxmarkovdev.springboot.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 
@@ -14,6 +15,7 @@ import java.util.Set;
 @Getter
 @Setter
 @AllArgsConstructor
+@NoArgsConstructor
 @Table(name = "roles")
 public class Role implements GrantedAuthority {
 
@@ -25,13 +27,8 @@ public class Role implements GrantedAuthority {
     @Column(nullable = false,unique = true)
     private String role;
 
-
     public Role(String role) {
         this.role = role;
-    }
-
-    public Role() {
-
     }
 
     @Override

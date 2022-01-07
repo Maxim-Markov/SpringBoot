@@ -26,7 +26,7 @@ import java.util.Objects;
 public class Reputation implements Serializable {
     private static final long serialVersionUID = 7177182244933788025L;
     @Id
-    @GeneratedValue(generator = "Reputation_seq")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @CreationTimestamp

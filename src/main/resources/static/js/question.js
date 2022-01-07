@@ -1,3 +1,5 @@
+const token = $('#csrfToken').attr('value');
+
 new autoComplete({
     selector: 'input[name="tags"]',
     minChars: 1,
@@ -13,11 +15,8 @@ new autoComplete({
             url: "/api/user/tag/letters",
             contentType: 'application/json',
             data: JSON.stringify(letters),
-            beforeSend: function (request) {
-                let token = $.cookie("jwt_token");
-                if (token != null) {
-                    request.setRequestHeader("Authorization", "Bearer " + token);
-                }
+            headers: {
+                'X-CSRF-TOKEN': token,
             },
             success: function (result) {
                 suggest(result);
@@ -58,16 +57,11 @@ $(document).on('submit', '#askQuestionForm', function () {
             type: "POST",
             contentType: 'application/json',
             data: form_data,
-            beforeSend: function (request) {
-                let token = $.cookie("jwt_token");
-                if (token != null) {
-                    request.setRequestHeader("Authorization", "Bearer " + token);
-                }
+            headers: {
+                'X-CSRF-TOKEN': token,
             },
             success: function (result) {
                 let id = result.id;
-                let persistDateTime = result.persistDateTime;
-                let listTagDto = result.listTagDto;
                 window.location.replace("/question/" + id);
             },
             error: function (error) {
@@ -165,7 +159,6 @@ descriptionField.addEventListener("keyup", updateDisplayField, false);
 function makeTransformation(sign) {
     if (descriptionField.selectionStart === descriptionField.selectionEnd) {
         let signText;
-        let text;
         if(sign === "$") signText = "курсивом";
         if(sign === "*") signText = "жирным шрифтом";
         if(sign === "\'") signText = "кодом";

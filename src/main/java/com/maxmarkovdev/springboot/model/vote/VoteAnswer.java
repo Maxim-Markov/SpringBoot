@@ -22,7 +22,7 @@ import java.time.LocalDateTime;
 public class VoteAnswer {
 
     @Id
-    @GeneratedValue(generator = "AnswerVote_seq")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne(optional = false, fetch = FetchType.LAZY)

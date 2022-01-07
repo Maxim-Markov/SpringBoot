@@ -19,11 +19,10 @@ formEdit.onsubmit = async (e) => {
             let rowToUpdate = rows[i];
             rowToUpdate.cells[0].textContent = id;
             rowToUpdate.cells[1].textContent = user.name;
-            rowToUpdate.cells[2].textContent = user.lastName;
-            rowToUpdate.cells[3].textContent = user.age;
-            rowToUpdate.cells[4].textContent = user.email;
-            rowToUpdate.cells[5].textContent = user.pass;
-            rowToUpdate.cells[6].textContent = user.roles[0].role.slice(5);
+            rowToUpdate.cells[2].textContent = user.age;
+            rowToUpdate.cells[3].textContent = user.email;
+            rowToUpdate.cells[4].textContent = user.pass;
+            rowToUpdate.cells[5].textContent = user.roles[0].role.slice(5);
         }
     }
     formEdit.querySelector('.close').click();

@@ -34,9 +34,7 @@ public class User implements UserDetails {
     @Column(unique = true)
     private String name; // уникальное значение
 
-    @Column(name = "last_name")
-    private String lastName;
-
+    @Column
     private byte age;
 
     @Column
@@ -71,6 +69,7 @@ public class User implements UserDetails {
     private String linkVk;
 
     @Column
+    @Type(type = "org.hibernate.type.TextType")
     private String about;
 
     @Column(name = "image_link")
@@ -105,11 +104,10 @@ public class User implements UserDetails {
         this.nickname = nickname;
     }
 
-    public User(@NonNull String name, String password, String email, String lastName, byte age) {
+    public User(@NonNull String name, String password, String email, byte age) {
         this.name = name;
         setPassword(password);
         this.email = email;
-        this.lastName = lastName;
         this.age = age;
     }
 
