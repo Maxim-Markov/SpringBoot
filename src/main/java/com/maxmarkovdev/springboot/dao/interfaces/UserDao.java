@@ -20,4 +20,7 @@ public interface UserDao extends ReadWriteDao<User, Long> {
 
     @Override
     List<User> getAll();
+
+    @Override
+    void deleteById(Long id);
 }

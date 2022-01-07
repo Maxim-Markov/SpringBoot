@@ -60,4 +60,9 @@ public class UserServiceImpl extends ReadWriteServiceImpl<User, Long> implements
     public List<User> getAll() {
         return userDao.getAll();
     }
+
+    @Override
+    public void deleteById(Long id) {
+        userDao.deleteById(id);
+    }
 }

@@ -21,7 +21,7 @@ public class UserDaoImpl extends ReadWriteDaoImpl<User, Long> implements UserDao
 
     @Override
     public Optional<User> findByName(String name) {
-        String hql = "FROM User u JOIN FETCH u.roles WHERE u.name = :name";
+        String hql = "FROM User u JOIN FETCH u.roles WHERE u.name = :name AND u.isEnabled = true";
         TypedQuery<User> query = sessionFactory.getCurrentSession()
                 .createQuery(hql, User.class).setParameter("name", name);
         return SingleResultUtil.getSingleResultOrNull(query);
@@ -38,7 +38,7 @@ public class UserDaoImpl extends ReadWriteDaoImpl<User, Long> implements UserDao
 
     @Override
     public Optional<User> getUserByName(String name) {
-        String hql = "FROM User u JOIN FETCH u.roles WHERE u.name = :userName";
+        String hql = "FROM User u JOIN FETCH u.roles WHERE u.name = :userName AND u.isEnabled = true";
         TypedQuery<User> query = sessionFactory.getCurrentSession().createQuery(hql,User.class).setParameter("userName", name);
         return SingleResultUtil.getSingleResultOrNull(query);
     }
@@ -60,8 +60,14 @@ public class UserDaoImpl extends ReadWriteDaoImpl<User, Long> implements UserDao
     @Override
     public List<User> getAll() {
         return sessionFactory.getCurrentSession()
-                .createQuery("FROM User u JOIN FETCH u.roles", User.class)
+                .createQuery("FROM User u JOIN FETCH u.roles WHERE u.isEnabled = true ORDER BY u.id", User.class)
                 .getResultList();
+    }
+
+    @Override
+    public void deleteById(Long id) {
+        User user = sessionFactory.getCurrentSession().find(User.class, id);
+        user.setIsEnabled(false);
     }
 }
 

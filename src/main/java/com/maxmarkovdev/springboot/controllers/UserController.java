@@ -3,7 +3,6 @@ package com.maxmarkovdev.springboot.controllers;
 
 import com.maxmarkovdev.springboot.model.User;
 import com.maxmarkovdev.springboot.service.interfaces.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 
@@ -18,10 +17,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/user1")
 public class UserController {
 
-    private UserService userService;
+    private final UserService userService;
 
-    @Autowired
-    public void setUserService(UserService userService) {
+    public UserController(UserService userService) {
         this.userService = userService;
     }
 

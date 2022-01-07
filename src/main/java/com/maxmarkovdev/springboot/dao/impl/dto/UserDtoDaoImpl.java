@@ -20,7 +20,7 @@ public class UserDtoDaoImpl implements UserDtoDao {
         return SingleResultUtil.getSingleResultOrNull(entityManager.createQuery(
                     "SELECT new com.maxmarkovdev.springboot.model.dto.UserDto" +
                        "(u.id, u.email, u.name, u.imageLink, u.city, SUM(r.count )) " +
-                       "FROM User u LEFT JOIN Reputation r ON u.id = r.author.id WHERE u.id =:id GROUP BY u.id",
+                       "FROM User u LEFT JOIN Reputation r ON u.id = r.author.id WHERE u.id =:id AND u.isEnabled = true GROUP BY u.id",
                        UserDto.class)
                     .setParameter("id", id));
     }

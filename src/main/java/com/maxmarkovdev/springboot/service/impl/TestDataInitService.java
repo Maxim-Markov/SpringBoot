@@ -93,8 +93,8 @@ public class TestDataInitService {
 
     //fill related tables user_entity and role with test data
     public void fillTableWithTestData() {
-        addRandomRoles();
-        addRandomUsersPermanentEmailPassword();
+        addRoles();
+        addRandomUsersPermanentNamePassword();
         addRandomTags();
         addRandomQuestions();
         addRandomAnswers();
@@ -182,7 +182,7 @@ public class TestDataInitService {
         tagService.persistAll(tags);
     }
 
-    private void addRandomUsersPermanentEmailPassword() {
+    private void addRandomUsersPermanentNamePassword() {
         fillPermanentUserParameters();
         List<User> users = new ArrayList<>();
         for (int i = 0; i < usersNum; i++) {
@@ -201,20 +201,21 @@ public class TestDataInitService {
         String about = getRand(abouts);
         String imageLink = getRandStr(10, 100);
         String nickname = email.substring(0, 3);
+        byte age = (byte) getRandInt(1,120);
 
-        users.add(new User(name, password, email, city,
+        users.add(new User(name, password, email, age, city,
                 linkSite, linkGithub, linkVk, about, imageLink, nickname));
     }
 
     List<Role> existingRoles = roleService.getAll();
-        for(int i = 0; i < usersNum; i++) {
+        users.get(0).setRoles(Collections.singleton(existingRoles.get(0)));
+        for(int i = 1; i < usersNum; i++) {
             if ((i < permanentUserParameters.size())) {
-                users.get(i).setRoles(Collections.singleton(existingRoles.get(0)));
+                users.get(i).setRoles(Collections.singleton(existingRoles.get(1)));
             } else {
                 users.get(i).setRoles(Collections.singleton(existingRoles.get(getRandInt(0, existingRoles.size()))));
             }
         }
-
         userService.persistAll(users);
 }
 
@@ -228,10 +229,11 @@ public class TestDataInitService {
         }
     }
 
-    private void addRandomRoles() {
-        Set<Role> testRoles = new HashSet<>();
+    private void addRoles() {
+        List<Role> testRoles = new ArrayList<>();
+        int counter = 0;
         while (testRoles.size() < rolesNum - 1) {
-            testRoles.add(new Role(getRand(roles)));
+            testRoles.add(new Role(roles[counter++]));
         }
         roleService.persistAll(testRoles);
     }

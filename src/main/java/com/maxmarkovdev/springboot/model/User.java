@@ -25,6 +25,7 @@ import java.util.Set;
 @Table(name = "users")
 public class User implements UserDetails {
     private static final long serialVersionUID = 8086496705293852501L;
+    private static PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -90,11 +91,12 @@ public class User implements UserDetails {
     private Set<Role> roles = new HashSet<>();
 
     public User(@NonNull String name, @NonNull String password, String email,
-                String city, String linkSite, String linkGitHub, String linkVk,
+                byte age, String city, String linkSite, String linkGitHub, String linkVk,
                 String about, String imageLink, String nickname) {
         this.name = name;
         setPassword(password);
         this.email = email;
+        this.age = age;
         this.city = city;
         this.linkSite = linkSite;
         this.linkGitHub = linkGitHub;
@@ -112,7 +114,7 @@ public class User implements UserDetails {
     }
 
     public void setPassword(String password) {
-        this.password = password;
+        this.password = passwordEncoder.encode(password);
     }
 
     @Override

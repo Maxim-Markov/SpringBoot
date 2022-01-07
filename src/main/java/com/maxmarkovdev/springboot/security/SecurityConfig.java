@@ -10,7 +10,6 @@ import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
@@ -38,15 +37,17 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter implements WebM
     protected void configure(HttpSecurity http) throws Exception {
         // csrf защита включена
         http.cors().disable();
-        http.authorizeRequests()
+        http
+                .addFilterBefore(new ExceptionHandlerFilter(), UsernamePasswordAuthenticationFilter.class)
+                .authorizeRequests()
                 .antMatchers("/**","/js/**","/images/**", "/css/**").permitAll() // доступность всем
-                .antMatchers("/user1").access("hasAnyRole('USER','ADMIN')")
-                .antMatchers("/admin").access("hasAnyRole('ADMIN')")// разрешаем входить на /user пользователям с ролью User
+                .antMatchers("/user1","/question/**","/user","/tags").access("hasAnyRole('USER','ADMIN')")
+                .antMatchers("/admin").access("hasAnyRole('ADMIN')")
+                .antMatchers("/api/user/**").access("hasAnyRole('USER','ADMIN')")
                 .anyRequest().permitAll()
                 .and().formLogin()
                 // Spring сам подставит свою login форму
                 .successHandler(successUserHandler); // подключаем наш SuccessHandler для перенаправления по ролям
-        http.addFilterBefore(new ExceptionHandlerFilter(), UsernamePasswordAuthenticationFilter.class);
     }
 
     @Override
