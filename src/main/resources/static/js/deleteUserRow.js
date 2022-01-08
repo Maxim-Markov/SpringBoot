@@ -1,6 +1,4 @@
 let formDelete = document.getElementsByName("DeleteForm")[0];//form in modal
-
-
 const token = $('#csrfDelete').attr('value');
 
 formDelete.onsubmit = async (e) => {
@@ -24,7 +22,8 @@ formDelete.onsubmit = async (e) => {
             if (rows[i].cells[0].textContent === id) {
                 let rowToDelete = rows[i];
                 rowToDelete.parentNode.removeChild(rowToDelete);
+                modalWindow();
             }
         }
-        formDelete.querySelector('.close').click()
+        formDelete.querySelector('.close').click();
 }

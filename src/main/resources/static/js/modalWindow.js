@@ -19,12 +19,11 @@ function modalWindow() {
         btns[i].onclick = function () {
             let form = modals[i % 2].getElementsByTagName("form")[0];
             let row = document.getElementsByClassName("usersRow")[Math.trunc(i / 2)];
-            for (let j = 0; j < 6; j++) {
+            for (let j = 0; j < 5; j++) {
                 form[j].value = row.cells[j].textContent;
             }
             modals[i % 2].style.display = "inline-block";
         }
-
     }
 
 
