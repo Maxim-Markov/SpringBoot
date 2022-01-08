@@ -144,7 +144,7 @@
                             <textarea class="no-resize form-control" rows="3" id="description "></textarea>
                         </label>
                     </div>
-                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+                    <input type="hidden" id="csrfToken" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
                     <div class="d-flex align-items-center" style="height: 70px;">
                         <button id="submit-button" type="submit" class="btn btn-primary" tabindex="120">
                             Отправить ответ
