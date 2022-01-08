@@ -1,6 +1,4 @@
 package com.maxmarkovdev.springboot.controllers;
-
-
 import com.maxmarkovdev.springboot.model.User;
 import com.maxmarkovdev.springboot.service.interfaces.UserService;
 import org.springframework.beans.factory.annotation.Autowired;

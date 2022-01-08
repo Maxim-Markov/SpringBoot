@@ -35,26 +35,23 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter implements WebM
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        // csrf защита включена
-        http.cors().disable();
-        http
-                .addFilterBefore(new ExceptionHandlerFilter(), UsernamePasswordAuthenticationFilter.class)
-                .authorizeRequests()
-                .antMatchers("/**","/js/**","/images/**", "/css/**").permitAll() // доступность всем
-                .antMatchers("/user1","/question/**","/user","/tags").access("hasAnyRole('USER','ADMIN')")
-                .antMatchers("/admin").access("hasAnyRole('ADMIN')")
+        http.authorizeRequests()
+                 .antMatchers("/js/**","/images/**", "/css/**").permitAll() // доступность всем
+                .antMatchers("/user1","/user", "/tags", "/question/**").access("hasAnyRole('USER','ADMIN')")
+                .antMatchers("/admin").access("hasRole('ADMIN')")
                 .antMatchers("/api/user/**").access("hasAnyRole('USER','ADMIN')")
+                .antMatchers("/").authenticated()
                 .anyRequest().permitAll()
-                .and().formLogin()
-                // Spring сам подставит свою login форму
+                .and().formLogin().loginPage("/login").permitAll()
                 .successHandler(successUserHandler); // подключаем наш SuccessHandler для перенаправления по ролям
+                //http.addFilterBefore(new ExceptionHandlerFilter(), UsernamePasswordAuthenticationFilter.class);
     }
 
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
                 .allowedOrigins("*")
-                .allowedMethods("*");
+                .allowedMethods("HEAD", "GET", "PUT", "POST", "DELETE", "PATCH");
     }
 
     @Override
