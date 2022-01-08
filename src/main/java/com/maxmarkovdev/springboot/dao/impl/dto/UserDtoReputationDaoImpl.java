@@ -31,6 +31,6 @@ public class UserDtoReputationDaoImpl implements PageDtoDao<UserDto> {
 
     @Override
     public long getTotalResultCount(Map<Object, Object> param) {
-        return (Long) entityManager.createQuery("SELECT count (id) FROM User u WHERE u.isEnabled = true").getSingleResult();
+        return (Long) entityManager.createQuery("SELECT COUNT (id) FROM User u WHERE u.isEnabled = true").getSingleResult();
     }
 }

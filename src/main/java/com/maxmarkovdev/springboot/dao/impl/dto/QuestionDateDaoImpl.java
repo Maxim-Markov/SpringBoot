@@ -57,6 +57,7 @@ public class QuestionDateDaoImpl implements PageDtoDao<QuestionDto> {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public long getTotalResultCount(Map<Object, Object> param) {
         List<Long> ignoredIds = (List<Long>) param.get("ignoredTags");
         List<Long> trackedIds = (List<Long>) param.get("trackedTags");

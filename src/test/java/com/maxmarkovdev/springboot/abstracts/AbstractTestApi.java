@@ -40,6 +40,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 public class AbstractTestApi {
 
+    @PersistenceContext
+    protected EntityManager em;
     @Autowired
     protected MockMvc mvc;
     @Autowired

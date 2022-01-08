@@ -31,14 +31,14 @@ public class AllQuestionDtoDaoImpl implements PageDtoDao<QuestionDto> {
 
         return entityManager.createQuery(
                         "SELECT new com.maxmarkovdev.springboot.model.dto.QuestionDto(q.id, q.title, q.user.id," +
-                                " q.user.name, q.user.imageLink, SUM(r.count)/(COUNT(r.id) / nullif(COUNT(DISTINCT r.id),0)), q.description, q.persistDateTime," +
+                                " q.user.name, q.user.imageLink, SUM(r.count)/(COUNT(r.id) / NULLIF(COUNT(DISTINCT r.id),0)), q.description, q.persistDateTime," +
                                 " q.lastUpdateDateTime, SUM(0), COUNT(DISTINCT answer.id)," +
-                                "(Select count(up.vote) from VoteQuestion up where up.vote = 'UP_VOTE' and up.question.id = q.id) - " +
-                                "(Select count(down.vote) from VoteQuestion down where down.vote = 'DOWN_VOTE' and down.question.id = q.id))" +
+                                "(SELECT COUNT(up.vote) FROM VoteQuestion up WHERE up.vote = 'UP_VOTE' AND up.question.id = q.id) - " +
+                                "(SELECT COUNT(down.vote) fROM VoteQuestion down WHERE down.vote = 'DOWN_VOTE' AND down.question.id = q.id))" +
                                 " FROM Question q JOIN q.tags t LEFT JOIN Answer answer ON q.id = answer.question.id" +
                                 " LEFT JOIN Reputation r ON q.user.id = r.author.id" +
-                                " WHERE q.id IN (SELECT q.id From Question q JOIN q.tags t WHERE " + additionalHql + " t.id IN :trackedIds)" +
-                                " AND q.id NOT IN (SELECT q.id From Question q JOIN q.tags t WHERE t.id IN :ignoredIds)" +
+                                " WHERE q.id IN (SELECT q.id FROM Question q JOIN q.tags t WHERE " + additionalHql + " t.id IN :trackedIds)" +
+                                " AND q.id NOT IN (SELECT q.id FROM Question q JOIN q.tags t WHERE t.id IN :ignoredIds)" +
                                 " GROUP BY q.id, q.user.name,q.user.imageLink ORDER BY q.id", QuestionDto.class)
                 .setParameter("trackedIds", trackedIds)
                 .setParameter("ignoredIds", ignoredIds)
@@ -57,8 +57,8 @@ public class AllQuestionDtoDaoImpl implements PageDtoDao<QuestionDto> {
             ignoredIds.add(-1L);
         }
         return (Long) entityManager.createQuery("SELECT COUNT(DISTINCT q.id) FROM Question q JOIN q.tags t" +
-                        " WHERE q.id IN (SELECT q.id From Question q JOIN q.tags t WHERE " + additionalHql + " t.id IN :trackedIds)" +
-                        " AND q.id NOT IN (SELECT q.id From Question q JOIN q.tags t WHERE t.id IN :ignoredIds)")
+                        " WHERE q.id IN (SELECT q.id FROM Question q JOIN q.tags t WHERE " + additionalHql + " t.id IN :trackedIds)" +
+                        " AND q.id NOT IN (SELECT q.id FROM Question q JOIN q.tags t WHERE t.id IN :ignoredIds)")
                 .setParameter("trackedIds", trackedIds)
                 .setParameter("ignoredIds", ignoredIds)
                 .getSingleResult();

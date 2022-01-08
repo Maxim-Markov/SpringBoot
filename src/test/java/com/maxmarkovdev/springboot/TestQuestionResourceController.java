@@ -5,6 +5,9 @@ import com.github.database.rider.core.api.dataset.ExpectedDataSet;
 import com.maxmarkovdev.springboot.abstracts.AbstractTestApi;
 import com.maxmarkovdev.springboot.model.dto.QuestionCreateDto;
 import com.maxmarkovdev.springboot.model.dto.TagDto;
+import com.maxmarkovdev.springboot.model.reputation.Reputation;
+import com.maxmarkovdev.springboot.model.vote.VoteQuestion;
+import com.maxmarkovdev.springboot.model.vote.VoteType;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
@@ -17,6 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -29,10 +33,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class TestQuestionResourceController extends AbstractTestApi {
 
     private final String url = "/api/user/question";
+    private final String urlUpVote = "/api/user/question/100/upVote";
 
     private static final String USER_ENTITY = "dataset/questionResourceController/user.yml";
     private static final String ROLE_ENTITY = "dataset/questionResourceController/role.yml";
-    private static final String USER_HAS_ROLE_ENTITY = "dataset/questionResourceController/usersHasRoles.yml";
+    private static final String USER_HAS_ROLE_ENTITY = "dataset/questionResourceController/users_has_roles.yml";
     private static final String USER_ENTITY_PAGINATION = "dataset/questionResourceController/allQuestuionDtos/user.yml";
     private static final String USER_HAS_ROLE_ENTITY_PAGINATION = "dataset/questionResourceController/allQuestuionDtos/usersHasRoles.yml";
     private static final String QUESTION_ENTITY = "dataset/questionResourceController/question.yml";
@@ -40,10 +45,15 @@ public class TestQuestionResourceController extends AbstractTestApi {
     private static final String TAG_ENTITY = "dataset/questionResourceController/tag.yml";
     private static final String TAG_ENTITY_PAGINATION = "dataset/questionResourceController/allQuestuionDtos/tag.yml";
     private static final String QUESTION_HAS_TAG_ENTITY_PAGINATION = "dataset/questionResourceController/allQuestuionDtos/questionHasTag.yml";
-    private static final String QUESTION_HAS_TAG_ENTITY = "dataset/questionResourceController/questionHasTag.yml";
+    private static final String QUESTION_HAS_TAG_ENTITY = "dataset/questionResourceController/question_has_tag.yml";
     private static final String ANSWER_ENTITY_PAGINATION = "dataset/questionResourceController/allQuestuionDtos/answer.yml";
     private static final String REPUTATION_ENTITY = "dataset/questionResourceController/reputation.yml";
     private static final String VOTE_QUESTION_ENTITY = "dataset/questionResourceController/allQuestuionDtos/voteQuestion.yml";
+    private static final String USER_ADD = "dataset/questionResourceController/user_add.yml";
+    private static final String USER_HAS_ROLE_ENTITY_ADD = "dataset/questionResourceController/users_has_roles_add.yml";
+    private static final String QUESTION_ADD = "dataset/questionResourceController/question_add.yml";
+    private static final String ANSWER_ENTITY = "dataset/questionResourceController/answer.yml";
+
 
     //expected
     private static final String NEW_QUESTION_ADDED = "dataset/expected/questionResourceController/newQuestionAdded.yml";
@@ -61,6 +71,8 @@ public class TestQuestionResourceController extends AbstractTestApi {
     private static final String TAG_BY_DATE = "dataset/questionResourceController/getQuestionDtoByDate/tag.yml";
     private static final String USER_BY_DATE = "dataset/questionResourceController/getQuestionDtoByDate/user.yml";
     private static final String VOTE_BY_DATE = "dataset/questionResourceController/getQuestionDtoByDate/vote.yml";
+
+
 
     @Test
     @WithMockUser(username = "user", password = "user")
@@ -349,6 +361,7 @@ public class TestQuestionResourceController extends AbstractTestApi {
     }
 
     @Test
+    @WithMockUser(username = "user", password = "user")
     @DataSet(value = {USER_ENTITY_PAGINATION, QUESTION_ENTITY_PAGINATION}, disableConstraints = true)
     public void countShouldBeTwenty() throws Exception {
         ResultActions response = mvc.perform(get(url + "/count").with(csrf()));
@@ -362,6 +375,7 @@ public class TestQuestionResourceController extends AbstractTestApi {
      * Пагинация вопросов по дате, сначала свежие
      * */
     @Test
+    @WithMockUser(username = "user", password = "user")
     @DataSet(value = {ANSWER_BY_DATE, QUESTION_BY_DATE, QUESTION_TAG_BY_DATE, REPUTATION_BY_DATE, TAG_BY_DATE,
             USER_BY_DATE, VOTE_BY_DATE}, disableConstraints = true)
     public void getQuestionsByPersistDate() throws Exception {
@@ -451,4 +465,87 @@ public class TestQuestionResourceController extends AbstractTestApi {
                 .andExpect(jsonPath("$.items.length()", is(2)))
                 .andExpect(jsonPath("$.totalResultCount", is(2)));
     }
+
+    @Test
+    @WithMockUser(username = "user", password = "user")
+    @DataSet(value = {USER_ADD, ROLE_ENTITY, USER_HAS_ROLE_ENTITY_ADD, REPUTATION_ENTITY, QUESTION_ADD, VOTE_QUESTION_ENTITY}, disableConstraints = true)
+    public void shouldDownVote() throws Exception {
+
+        String urlDownVote = "/api/user/question/100/downVote";
+        mvc.perform(post(urlDownVote).with(csrf())
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk());
+
+        VoteQuestion vt = em.createQuery("select vt from VoteQuestion vt " +
+                "where vt.user.id = 100 and vt.question.id = 100", VoteQuestion.class).getSingleResult();
+        assertThat(vt.getVote()).isEqualTo(VoteType.DOWN_VOTE);
+
+        Reputation rt = em.createQuery("select rt from Reputation rt " +
+                "where rt.question.id = 100 and rt.sender.id = 100", Reputation.class).getSingleResult();
+        assertThat(rt.getCount()).isEqualTo(-5);
+
+        mvc.perform(post(urlUpVote).with(csrf())
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    @WithMockUser(username = "user", password = "user")
+    @DataSet(value = {USER_ADD, ROLE_ENTITY, USER_HAS_ROLE_ENTITY_ADD, REPUTATION_ENTITY, QUESTION_ADD, VOTE_QUESTION_ENTITY}, disableConstraints = true)
+    public void shouldUpVote() throws Exception {
+
+        mvc.perform(post(urlUpVote).with(csrf())
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk());
+
+        VoteQuestion vt = em.createQuery("select vt from VoteQuestion vt " +
+                "where vt.user.id = 100 and vt.question.id = 100", VoteQuestion.class).getSingleResult();
+        assertThat(vt).isNotNull();
+        assertThat(vt.getVote()).isEqualTo(VoteType.UP_VOTE);
+
+        Reputation rt = em.createQuery("select rt from Reputation rt " +
+                "where rt.question.id = 100 and rt.sender.id = 100", Reputation.class).getSingleResult();
+        assertThat(rt).isNotNull();
+        assertThat(rt.getCount()).isEqualTo(10);
+
+        mvc.perform(post(urlUpVote).with(csrf())
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    @WithMockUser(username = "user", password = "user")
+    @DataSet(value = {USER_ENTITY, USER_HAS_ROLE_ENTITY, ROLE_ENTITY, TAG_ENTITY, QUESTION_HAS_TAG_ENTITY,
+            ANSWER_ENTITY, QUESTION_ENTITY, REPUTATION_ENTITY, VOTE_QUESTION_ENTITY}, disableConstraints = true)
+    public void getQuestionDtoById() throws Exception {
+        mvc.perform(get("/api/user/question/100").with(csrf()))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id", is(100)))
+                .andExpect(jsonPath("$.title", is("lazyEx")))
+                .andExpect(jsonPath("$.authorId", is(100)))
+                .andExpect(jsonPath("$.authorReputation", is(30)))
+                .andExpect(jsonPath("$.authorName", is("user")))
+                .andExpect(jsonPath("$.authorImage", is("test.ru")))
+                .andExpect(jsonPath("$.description", is("fix lazyInitialization Exception")))
+                .andExpect(jsonPath("$.viewCount", is(0)))
+                .andExpect(jsonPath("$.countAnswer", is(1)))
+                .andExpect(jsonPath("$.countValuable", is(0)))
+                .andExpect(jsonPath("$.listTagDto.[*].id", containsInAnyOrder(100, 101)))
+                .andExpect(jsonPath("$.listTagDto.[*].name", containsInAnyOrder("db_architecture", "Room")))
+                .andExpect(jsonPath("$.listTagDto.[*].description", containsInAnyOrder("my sql database architecture", "Room Android best practises")));
+
+        /*
+         * Проверка на не существующий ID
+         * */
+        mvc.perform(get("/api/user/question/1000").with(csrf()))
+                .andDo(print())
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$").value("Missing question or invalid id"));
+    }
+
 }

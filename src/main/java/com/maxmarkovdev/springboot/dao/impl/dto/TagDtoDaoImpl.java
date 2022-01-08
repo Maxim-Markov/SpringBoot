@@ -29,8 +29,8 @@ public class TagDtoDaoImpl implements TagDtoDao {
 
     @Override
     public Map<Long, List<TagDto>> getMapTagsByQuestionIds(List<Long> questionIds){
-        List<Tuple> tags = em.createQuery("SELECT t.id as tag_id, t.name as tag_name, t.description as tag_description," +
-                                " q.id as question_id From Tag t JOIN t.questions q WHERE q.id in :ids", Tuple.class)
+        List<Tuple> tags = em.createQuery("SELECT t.id AS tag_id, t.name AS tag_name, t.description AS tag_description," +
+                                " q.id AS question_id FROM Tag t JOIN t.questions q WHERE q.id IN :ids", Tuple.class)
                 .setParameter("ids", questionIds)
                 .getResultList();
 
@@ -40,6 +40,13 @@ public class TagDtoDaoImpl implements TagDtoDao {
                     .add(new TagDto(tuple.get("tag_id", Long.class), tuple.get("tag_name", String.class), tuple.get("tag_description", String.class)));
         });
         return tagsMap;
+    }
+
+    @Override
+    public List<TagDto> getTagDtoListByQuestionId(Long id) {
+        return em.createQuery("SELECT new com.maxmarkovdev.springboot.model.dto.TagDto" +
+                "(tag.id, tag.name, tag.description)" +
+                "FROM Tag tag WHERE :id IN (SELECT tag_q.id FROM tag.questions tag_q)", TagDto.class).setParameter("id", id).getResultList();
     }
 }
 

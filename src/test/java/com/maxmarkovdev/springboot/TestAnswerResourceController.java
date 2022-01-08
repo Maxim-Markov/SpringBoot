@@ -13,7 +13,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 public class TestAnswerResourceController extends AbstractTestApi {
 
-    private static final String USER_HAS_ROLE_ENTITY = "dataset/questionResourceController/usersHasRoles.yml";
+    private static final String USER_HAS_ROLE_ENTITY = "dataset/questionResourceController/users_has_roles.yml";
     private static final String VOTE_USER_ENTITY = "dataset/answerResourceController/vote/user_entity.yml";
     private static final String ROLE = "dataset/answerResourceController/vote/role.yml";
     private static final String ANSWER = "dataset/answerResourceController/vote/answer.yml";

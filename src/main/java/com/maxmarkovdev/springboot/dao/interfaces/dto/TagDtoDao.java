@@ -9,4 +9,6 @@ public interface TagDtoDao {
     List<TagDto> getTagsByLetters(String letters);
 
     Map<Long, List<TagDto>> getMapTagsByQuestionIds(List<Long> questionIds);
+
+    List<TagDto> getTagDtoListByQuestionId(Long id);
 }

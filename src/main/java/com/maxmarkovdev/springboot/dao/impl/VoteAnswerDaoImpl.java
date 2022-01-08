@@ -19,14 +19,14 @@ public class VoteAnswerDaoImpl extends ReadWriteDaoImpl<VoteAnswer, Long> implem
     @Override
     public Long getVoteCount(Long answerId) {
         return entityManager
-                .createQuery("SELECT count(*) from VoteAnswer v where v.answer.id=:answerId", Long.class)
+                .createQuery("SELECT COUNT(*) FROM VoteAnswer v WHERE v.answer.id=:answerId", Long.class)
                 .setParameter("answerId", answerId).getSingleResult();
     }
 
     @Override
     public Optional<VoteAnswer> findByAnswerAndUser(Long answerId, Long userId) {
         return SingleResultUtil.getSingleResultOrNull(entityManager.createQuery(
-                        "FROM VoteAnswer v where v.answer.id=:answerId and v.user.id=:userId", VoteAnswer.class)
+                        "FROM VoteAnswer v WHERE v.answer.id=:answerId AND v.user.id=:userId", VoteAnswer.class)
                 .setParameter("answerId", answerId)
                 .setParameter("userId", userId));
     }
