@@ -37,9 +37,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter implements WebM
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
                  .antMatchers("/js/**","/images/**", "/css/**").permitAll() // доступность всем
-                .antMatchers("/user1","/user", "/tags", "/question/**").access("hasAnyRole('USER','ADMIN')")
+                .antMatchers("/user1").access("hasAnyRole('USER','ADMIN')")
                 .antMatchers("/admin").access("hasRole('ADMIN')")
-                .antMatchers("/api/user/**").access("hasAnyRole('USER','ADMIN')")
                 .antMatchers("/").authenticated()
                 .anyRequest().permitAll()
                 .and().formLogin().loginPage("/login").permitAll()

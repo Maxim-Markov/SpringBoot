@@ -1,28 +1,27 @@
 package com.maxmarkovdev.springboot.service.impl;
 
-import com.maxmarkovdev.springboot.model.*;
+import com.maxmarkovdev.springboot.model.Role;
+import com.maxmarkovdev.springboot.model.User;
 import com.maxmarkovdev.springboot.model.dto.AuthenticationRequestDto;
-import com.maxmarkovdev.springboot.model.reputation.Reputation;
-import com.maxmarkovdev.springboot.model.reputation.ReputationType;
-import com.maxmarkovdev.springboot.service.interfaces.*;
+import com.maxmarkovdev.springboot.service.interfaces.RoleService;
+import com.maxmarkovdev.springboot.service.interfaces.UserService;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
 @Service
 public class TestDataInitService {
 
+    private final List<AuthenticationRequestDto> permanentUserParameters = new ArrayList<>();
+
     //Amount of test data
     private final static int usersNum = 60;//first 50 with permanent email and password and has role USER, others with random parameters
     private final static int rolesNum = 7;
-    private final static int answersNum = 10;
-    private final static int questionsNum = 10;
-    private final static int tagsNum = 10;
-    private final static int reputationsNum = 10;
 
-    private final List<AuthenticationRequestDto> permanentUserParameters = new ArrayList<>();
+
 
     //static fields for random values
     private static final Character[] alphabet = "abcdefghijklmnopqrstuvwxyz"
@@ -63,124 +62,20 @@ public class TestDataInitService {
     private static final String[] roles = new String[]{
             "ROLE_ADMIN", "ROLE_USER", "ROLE_ANONYMOUS", "ROLE_GUEST", "ROLE_UNDEFINED", "ROLE_MAIN"};
 
-    private static final String[] randomWords = new String[]{
-            "teach", "about", "you", "may", "back", "going to",
-            "live", "destination", "tomorrow", "big", "date", "I",
-            "walk", "theatre", "queue", "window", "package",
-            "run", "into", "for", "over", "apple", "dark",
-            "order", "seller", "headphone", "break", "buy"};
-
-    private static final String[] htmlTags = new String[]{
-            "div", "span", "h1", "button", "b", "strong", "sup", "sub"};
-
     public TestDataInitService(UserService userService,
-                               RoleService roleService, AnswerService answerService,
-                               QuestionService questionService, TagService tagService, ReputationService reputationService) {
+                               RoleService roleService) {
         this.userService = userService;
         this.roleService = roleService;
-        this.answerService = answerService;
-        this.questionService = questionService;
-        this.tagService = tagService;
-        this.reputationService = reputationService;
     }
 
     private final UserService userService;
     private final RoleService roleService;
-    private final AnswerService answerService;
-    private final QuestionService questionService;
-    private final TagService tagService;
-    private final ReputationService reputationService;
-
     //fill related tables user_entity and role with test data
     public void fillTableWithTestData() {
         addRoles();
         addRandomUsersPermanentNamePassword();
-        addRandomTags();
-        addRandomQuestions();
-        addRandomAnswers();
-        addRandomReputation();
     }
 
-    private void addRandomReputation() {
-        Set<Reputation> reputations = new HashSet<>();
-        for (int i = 0; i < reputationsNum; i++) {
-            int count = getRandInt(0, 1000);
-            ReputationType type = ReputationType.values()[getRandInt(0,3)];
-            Reputation reputation = new Reputation();
-            reputation.setCount(count);
-            reputation.setType(type);
-            reputation.setAuthor(userService.getById((long) getRandInt(1, usersNum)).orElse(null));
-            reputation.setSender(userService.getById((long) getRandInt(1, usersNum)).orElse(null));
-            if ((type == ReputationType.Answer || type == ReputationType.VoteAnswer)) {
-                reputation.setAnswer(answerService.getById((long) getRandInt(1, answersNum)).orElse(null));
-            } else {
-                reputation.setQuestion(questionService.getById((long) getRandInt(1, questionsNum)).orElse(null));
-            }
-            reputations.add(reputation);
-        }
-        reputationService.persistAll(reputations);
-    }
-
-    private void addRandomAnswers() {
-        List<Answer> answers = new ArrayList<>();
-        for (int i = 0; i < answersNum; i++) {
-            String first = getRand(htmlTags);
-            String second = getRand(htmlTags);
-            String third = getRand(htmlTags);
-            String htmlBody = "<" + first + ">" + getRand(randomWords) + "</" + first + ">" + "\n" +
-                    "<" + second + ">" + getRand(randomWords) + "</" + second + ">" + "\n" +
-                    "<" + third + ">" + getRand(randomWords) + "</" + third + ">";
-            LocalDateTime dateAcceptTime = LocalDateTime.of(2021, getRandInt(1, 12),
-                    getRandInt(1, 28), getRandInt(0, 23),
-                    getRandInt(0, 59));
-            Answer answer = new Answer(null, null, htmlBody, i % 5 == 0, i % 2 == 0, i % 6 == 0);
-            answer.setDateAcceptTime(dateAcceptTime);
-            answers.add(answer);
-        }
-
-        List<User> existingUsers = userService.getAll();
-        List<Question> existingQuestions = questionService.getAll();
-        for (Answer answer : answers) {
-            answer.setUser(existingUsers.get(getRandInt(0, existingUsers.size())));
-            answer.setQuestion(existingQuestions.get(getRandInt(0, existingQuestions.size())));
-        }
-        answerService.persistAll(answers);
-    }
-
-    private void addRandomQuestions() {
-        List<Question> questions = new ArrayList<>();
-        for (int i = 0; i < questionsNum; i++) {
-            String title = getRand(randomWords);
-            StringBuilder description = new StringBuilder();
-            for (int j = 0; j < getRandInt(3, 15); j++) {
-                description.append(getRand(randomWords)).append(" ");
-            }
-            questions.add(new Question(null, title, description.toString(), null,
-                    null, null, null, i % 3 == 0, null));
-        }
-
-        List<User> existingUsers = userService.getAll();
-        List<Tag> existingTags = tagService.getAll();
-        for (Question question : questions) {
-            question.setUser(existingUsers.get(getRandInt(0, existingUsers.size())));
-            int tagEndIndex = getRandInt(1, existingTags.size());
-            question.setTags(existingTags.subList(0, tagEndIndex));
-        }
-        questionService.persistAll(questions);
-    }
-
-    private void addRandomTags() {
-        List<Tag> tags = new ArrayList<>();
-        for (int i = 0; i < tagsNum; i++) {
-            String name = getRand(randomWords);
-            StringBuilder description = new StringBuilder();
-            for (int j = 0; j < getRandInt(3, 15); j++) {
-                description.append(getRand(randomWords)).append(" ");
-            }
-            tags.add(new Tag(null, name, description.toString(), null, null));
-        }
-        tagService.persistAll(tags);
-    }
 
     private void addRandomUsersPermanentNamePassword() {
         fillPermanentUserParameters();

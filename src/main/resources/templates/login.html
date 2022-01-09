@@ -15,6 +15,7 @@
 <main>
     <form class="form-signin container" th:method="post" th:action="@{/login}">
         <h1 class="h3 mb-3 fw-normal">Please sign in</h1>
+
         <div th:if="${param.error}" class="alert alert-error row">
             Invalid username and password.
         </div>
@@ -30,6 +31,11 @@
             <label for="password" class="sr-only">Password</label>
         </div>
         <button class="w-100 btn btn-lg btn-primary" type="submit">Sign in</button>
+        <br>
+        <div class="alert alert-error row">
+            You can use next - name: user, password: user
+        </div>
     </form>
+
 </main>
 </body>

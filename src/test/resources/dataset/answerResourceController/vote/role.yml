@@ -1,5 +1,0 @@
-roles:
-  - id: 100
-    role: "ROLE_USER"
-  - id: 101
-    role: "ROLE_ADMIN"
